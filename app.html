@@ -48,9 +48,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1024">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Phalanx — Drone Mission Control</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -116,13 +121,16 @@
     -webkit-font-smoothing: antialiased;
   }
   #app {
-    width:1024px; height:768px;
+    width:100%; height:100dvh;
     background: var(--bg-base);
     position:relative;
     overflow:hidden;
     border-radius:var(--radius-lg);
     border:1px solid var(--border-subtle);
     box-shadow:0 0 80px rgba(0,0,0,.6);
+  }
+  @media (min-width: 768px) {
+    #app { width:1024px; height:768px; }
   }
 
   /* STATUS BAR */
@@ -1170,6 +1178,96 @@
   .boundary-modal-actions button:hover { border-color:var(--border-strong); color:var(--text); }
   .boundary-modal-actions button.primary { background:#3d6b85; border-color:#3d6b85; color:#d4e0e8; }
   .boundary-modal-actions button.primary:hover { background:#4a7a96; }
+
+/* ═══════════════════════════════════════════════ */
+/* ═══ MOBILE RESPONSIVE — max-width: 767px ═══ */
+/* ═══════════════════════════════════════════════ */
+.mobile-only { display:none; }
+
+@media (max-width: 767px) {
+  html { height:100%; overflow:hidden; position:fixed; inset:0; }
+  body { display:block; height:100dvh; overflow:hidden; position:fixed; inset:0; touch-action:auto; }
+  #app { position:fixed; inset:0; width:100%; height:100dvh; border:none; border-radius:0; box-shadow:none; overflow:hidden; z-index:1; }
+
+  /* Hide desktop chrome */
+  .bottom-nav { display:none !important; }
+  .status-bar { position:fixed; top:0; left:0; right:0; z-index:100; background:linear-gradient(to bottom, rgba(0,0,0,.6) 0%, transparent 100%); border:none; height:36px; padding:0 12px; }
+
+  /* Screens fill viewport */
+  .screen { height:100dvh; }
+  .screen.active { display:flex; }
+
+  /* Chat-only screens: dark fullscreen */
+  .chat-layout { min-height:100dvh; padding:44px 16px 80px; background:var(--bg-base); }
+
+  /* Split layouts: map fullscreen, hide desktop chat panel */
+  .split-layout { flex-direction:column; }
+  .split-map, .video-feed { position:fixed; inset:0; flex:none; width:100%; height:100dvh; }
+  .split-chat { display:none; }
+
+  /* Show mobile elements */
+  .mobile-only { display:flex; }
+  .mobile-only.sara-toast { display:none; } /* hidden until needed */
+  .mobile-only.drawer { display:flex; }
+  .mobile-only.drawer-scrim { display:block; }
+
+  /* Top gradient */
+  .top-grad { position:fixed; top:0; left:0; right:0; height:80px; background:linear-gradient(to bottom, rgba(0,0,0,.7) 0%, rgba(0,0,0,.25) 60%, transparent 100%); pointer-events:none; z-index:10; }
+
+  /* Bottom gradient */
+  .bottom-grad { position:fixed; bottom:0; left:0; right:0; height:30%; background:linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.4) 50%, transparent 100%); pointer-events:none; z-index:10; transition:opacity .4s ease; }
+  body.drawer-open .bottom-grad { opacity:0; }
+
+  /* Drag bar */
+  .drag-bar { position:fixed; bottom:0; left:50%; transform:translateX(-50%); z-index:15; width:100px; height:44px; display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .drag-pill { width:40px; height:4px; background:rgba(255,255,255,.25); border-radius:2px; }
+  body.drawer-open .drag-bar { opacity:0; pointer-events:none; }
+
+  /* SARA toast */
+  .sara-toast { position:fixed; bottom:100px; left:14px; right:100px; z-index:15; background:rgba(20,20,23,.85); border:1px solid rgba(255,255,255,.06); border-radius:6px; padding:10px 14px; font-size:13px; line-height:1.4; color:rgba(255,255,255,.85); opacity:0; transform:translateY(8px); transition:opacity .3s ease, transform .3s ease; pointer-events:none; }
+  .sara-toast.visible { opacity:1; transform:translateY(0); pointer-events:auto; cursor:pointer; }
+  .toast-label { font-family:var(--mono); font-size:9px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; display:flex; align-items:center; gap:4px; }
+  body.drawer-open .sara-toast { opacity:0 !important; pointer-events:none !important; }
+
+  /* Bottom controls */
+  .bottom-controls { position:fixed; bottom:max(20px, env(safe-area-inset-bottom)); left:14px; z-index:15; display:flex; gap:8px; }
+  .btn-icon { width:44px; height:44px; border-radius:8px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .btn-icon .material-symbols-outlined { font-size:18px; color:rgba(255,255,255,.4); }
+
+  /* FAB */
+  .fab { position:fixed; bottom:max(16px, env(safe-area-inset-bottom)); right:16px; z-index:110; width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #3d6b85 0%, #2d5a74 100%); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; -webkit-user-select:none; touch-action:none; box-shadow:0 4px 20px rgba(61,107,133,.4), 0 2px 8px rgba(0,0,0,.3); transition:all .25s cubic-bezier(.32,.72,0,1); }
+  .fab .material-symbols-outlined { font-size:28px; color:#fff; transition:all .2s; }
+  .fab::before { content:''; position:absolute; inset:-4px; border-radius:50%; border:2px solid rgba(61,107,133,.3); animation:fabIdle 3s ease infinite; }
+  @keyframes fabIdle { 0%,100% { transform:scale(1); opacity:.3; } 50% { transform:scale(1.15); opacity:0; } }
+  .fab.active { background:linear-gradient(135deg, #b85454 0%, #8a3e3e 100%); box-shadow:0 4px 30px rgba(184,84,84,.5), 0 0 60px rgba(184,84,84,.15); transform:scale(1.08); }
+  .fab.active::before { border-color:rgba(184,84,84,.4); animation:fabActive 1s ease infinite; }
+  @keyframes fabActive { 0%,100% { transform:scale(1); opacity:.5; } 50% { transform:scale(1.4); opacity:0; } }
+  .fab.close-mode { background:rgba(255,255,255,.08); box-shadow:0 2px 12px rgba(0,0,0,.3); width:48px; height:48px; }
+  .fab.close-mode::before { animation:none; opacity:0; }
+  .fab.close-mode .material-symbols-outlined { font-size:24px; color:rgba(255,255,255,.5); }
+
+  /* Drawer */
+  .drawer-scrim { position:fixed; inset:0; z-index:80; background:transparent; opacity:0; pointer-events:none; transition:opacity .35s; }
+  .drawer-scrim.on { opacity:1; pointer-events:auto; }
+  .drawer { position:fixed; bottom:0; left:0; right:0; z-index:90; height:30vh; background:#0c0c0e; border-top-left-radius:14px; border-top-right-radius:14px; transform:translateY(100%); transition:transform .4s cubic-bezier(.32,.72,0,1); flex-direction:column; touch-action:none; box-shadow:0 -8px 40px rgba(0,0,0,.8), 0 -1px 0 rgba(255,255,255,.05); overflow:hidden; }
+  .drawer.open { transform:translateY(0); }
+  .drawer-handle-area { padding:10px 0 6px; flex-shrink:0; display:flex; justify-content:center; cursor:grab; }
+  .drawer-handle { width:32px; height:3px; background:rgba(255,255,255,.18); border-radius:2px; }
+  .drawer-chat { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 16px 80px; overscroll-behavior:contain; -webkit-mask-image:linear-gradient(to bottom, transparent 0%, black 15%, black 100%); mask-image:linear-gradient(to bottom, transparent 0%, black 15%, black 100%); }
+  .drawer-chat::-webkit-scrollbar { display:none; }
+
+  /* Chat messages in drawer */
+  .drawer-chat .ch-msg { margin-bottom:2px; padding:10px 0; position:relative; }
+  .drawer-chat .ch-msg+.ch-msg { border-top:1px solid rgba(255,255,255,.03); }
+  .drawer-chat .ch-msg.sara { padding-left:10px; border-left:2px solid rgba(95,143,173,.25); max-width:82%; }
+  .drawer-chat .ch-msg.sara .ch-role { font-family:var(--mono); font-size:9px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; display:flex; align-items:center; gap:4px; }
+  .drawer-chat .ch-msg.sara .ch-text { font-size:13px; line-height:1.5; color:rgba(255,255,255,.92); }
+  .drawer-chat .ch-msg.user { text-align:right; padding-right:10px; border-right:2px solid rgba(255,255,255,.12); max-width:82%; margin-left:auto; }
+  .drawer-chat .ch-msg.user .ch-role { font-family:var(--mono); font-size:9px; font-weight:600; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; display:flex; align-items:center; justify-content:flex-end; gap:4px; }
+  .drawer-chat .ch-msg.user .ch-text { font-size:13px; line-height:1.5; color:rgba(255,255,255,.45); }
+  .drawer-chat .ch-msg .w { display:inline; animation:wordIn .2s ease both; }
+  @keyframes mWordIn { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
+}
 
 /* ============================================
    WIREFRAME MODE
@@ -2304,6 +2402,32 @@ body.wireframe .msg strong { font-weight: 600; }
 
 </div>
 
+<!-- ═══ MOBILE ONLY — hidden on desktop ═══ -->
+<div class="mobile-only top-grad"></div>
+<div class="mobile-only bottom-grad"></div>
+
+<div class="mobile-only drag-bar" id="dragBar">
+  <div class="drag-pill"></div>
+</div>
+
+<div class="mobile-only sara-toast" id="saraToast">
+  <div class="toast-label"><span class="material-symbols-outlined" style="font-size:11px">volume_up</span> SARA</div>
+  <div id="toastText"></div>
+</div>
+
+<div class="mobile-only bottom-controls">
+  <div class="btn-icon" id="kbBtn"><span class="material-symbols-outlined">keyboard</span></div>
+  <div class="btn-icon" id="optBtn"><span class="material-symbols-outlined">more_horiz</span></div>
+</div>
+
+<button class="mobile-only fab" id="fab"><span class="material-symbols-outlined" id="fabIcon">mic</span></button>
+
+<div class="mobile-only drawer-scrim" id="scrim"></div>
+<div class="mobile-only drawer" id="drawer">
+  <div class="drawer-handle-area"><div class="drawer-handle"></div></div>
+  <div class="drawer-chat" id="drawerChat"></div>
+</div>
+
 <script>
   // Wireframe mode toggle
   if (new URLSearchParams(window.location.search).has('wireframe')) {
@@ -2493,6 +2617,105 @@ body.wireframe .msg strong { font-weight: 600; }
 
     closePillModal();
   }
+
+  // ═══════ SHARED PTT HELPERS (v3) ═══════
+  function getChatContainer() {
+    const isMob = window.matchMedia('(max-width: 767px)').matches;
+    if (isMob) return document.getElementById('drawerChat');
+    return document.getElementById('chat' + currentScreen);
+  }
+
+  function appendUserMsgTo(container) {
+    const el = document.createElement('div');
+    el.className = 'ch-msg user';
+    el.innerHTML = '<div class="ch-role">YOU<span class="material-symbols-outlined" style="font-size:11px">mic</span></div><div class="ch-text"></div>';
+    container.appendChild(el);
+    return el.querySelector('.ch-text');
+  }
+
+  function appendSaraMsgTo(container) {
+    const el = document.createElement('div');
+    el.className = 'ch-msg sara';
+    el.innerHTML = '<div class="ch-role"><span class="material-symbols-outlined" style="font-size:11px">volume_up</span>SARA</div><div class="ch-text"></div>';
+    container.appendChild(el);
+    return el.querySelector('.ch-text');
+  }
+
+  // ═══════ MOBILE DRAWER (v3) ═══════
+  let drawerOpen = false;
+
+  function openDrawer(forRecording) {
+    if (drawerOpen) return;
+    drawerOpen = true;
+    document.body.classList.add('drawer-open');
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('scrim').classList.add('on');
+    if (!forRecording) {
+      document.getElementById('fab').classList.add('close-mode');
+      document.getElementById('fabIcon').textContent = 'close';
+    }
+  }
+
+  function closeDrawer() {
+    if (!drawerOpen) return;
+    drawerOpen = false;
+    document.body.classList.remove('drawer-open');
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('scrim').classList.remove('on');
+    const fab = document.getElementById('fab');
+    if (fab) {
+      fab.classList.remove('close-mode', 'active', 'processing');
+      document.getElementById('fabIcon').textContent = 'mic';
+    }
+  }
+
+  // Mobile event listeners (only if elements exist)
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrim = document.getElementById('scrim');
+    const fab = document.getElementById('fab');
+    const dragBar = document.getElementById('dragBar');
+    const toast = document.getElementById('saraToast');
+
+    if (scrim) scrim.addEventListener('click', closeDrawer);
+    if (dragBar) dragBar.addEventListener('click', () => { if (!drawerOpen) openDrawer(false); });
+    if (toast) toast.addEventListener('click', () => { if (!drawerOpen) openDrawer(false); });
+
+    if (fab) {
+      fab.addEventListener('click', () => {
+        if (fab.classList.contains('close-mode')) closeDrawer();
+      });
+      // PTT hold
+      fab.addEventListener('touchstart', e => {
+        if (fab.classList.contains('close-mode')) return;
+        e.preventDefault();
+        // PTT start — will be wired in Phase 2
+      }, { passive: false });
+      fab.addEventListener('touchend', e => {
+        if (fab.classList.contains('close-mode')) return;
+        e.preventDefault();
+        // PTT stop — will be wired in Phase 2
+      }, { passive: false });
+    }
+
+    // Handle swipe down to close
+    const handleArea = document.querySelector('.drawer-handle-area');
+    let startY = 0;
+    if (handleArea) {
+      handleArea.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+      handleArea.addEventListener('touchmove', e => { if (e.touches[0].clientY - startY > 50) closeDrawer(); }, { passive: true });
+    }
+  });
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ═══════ LEAFLET MAP (v3 — replaces static satellite.png) ═══════
+const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+if (typeof L !== 'undefined') {
+  // Only init map on screens that need it (4-9)
+  // For now, just set up the map object
+  // Full integration with screen navigation comes in Phase 2
+}
 </script>
 </body>
 </html>
