@@ -1179,6 +1179,19 @@
   .boundary-modal-actions button.primary { background:#3d6b85; border-color:#3d6b85; color:#d4e0e8; }
   .boundary-modal-actions button.primary:hover { background:#4a7a96; }
 
+/* PATH SELECTION CARDS */
+.path-card {
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--bg-panel);
+  padding:16px;
+  transition:border-color .15s, background .15s;
+}
+.path-card:hover {
+  border-color:var(--border-strong);
+  background:var(--bg-card);
+}
+
 /* ═══════════════════════════════════════════════ */
 /* ═══ MOBILE RESPONSIVE — max-width: 767px ═══ */
 /* ═══════════════════════════════════════════════ */
@@ -1593,6 +1606,16 @@ body.wireframe .summary-label { color: #999; }
 body.wireframe .summary-value { color: #1a1a1a; }
 body.wireframe .summary-value.green { color: #1a1a1a; }
 
+/* Path cards */
+body.wireframe .path-card {
+  border: 1px solid #ccc;
+  background: #fff;
+}
+body.wireframe .path-card:hover {
+  border-color: #999;
+  background: #fafafa;
+}
+
 /* Typing indicator */
 body.wireframe .typing-indicator {
   background: #f5f5f5;
@@ -1679,7 +1702,7 @@ body.wireframe .msg strong { font-weight: 600; }
           Enter your <strong>organization token</strong> to get started.
           <div style="margin-top:12px;display:flex;gap:8px">
             <input type="text" id="tokenInput" class="chat-input" placeholder="Paste token..." style="flex:1;margin:0;font-family:var(--mono);font-size:12px;letter-spacing:0.02em" value="pk_org_9f2a1b8c">
-            <button class="choice-btn primary" onclick="goToScreen(2)" style="white-space:nowrap"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">link</span>Connect</button>
+            <button class="choice-btn primary" onclick="goToScreen('2')" style="white-space:nowrap"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">link</span>Connect</button>
           </div>
         </div>
       </div>
@@ -1690,13 +1713,318 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 2: ORG + DRONE SELECTION ========== -->
+  <!-- ========== SCREEN 2: PATH SELECTION ========== -->
   <div class="screen" id="screen2">
     <div class="chat-layout">
       <div class="chat-messages" id="chat2">
         <div class="msg sara">
           Authenticated. Organization: <strong>Riverside County SAR</strong>
         </div>
+        <div class="msg sara">
+          How would you like to start your mission?
+          <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+            <div class="path-card" onclick="selectPath('911')" style="flex:1;min-width:200px;cursor:pointer">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <span class="material-symbols-outlined" style="font-size:20px;color:var(--red)">emergency</span>
+                <span style="font-weight:600;font-size:15px;color:var(--text-bright)">911 Response</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Select from active incidents. SARA will analyze dispatch transcripts and extract mission parameters automatically.</div>
+            </div>
+            <div class="path-card" onclick="selectPath('manual')" style="flex:1;min-width:200px;cursor:pointer">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <span class="material-symbols-outlined" style="font-size:20px;color:var(--accent)">flight_takeoff</span>
+                <span style="font-weight:600;font-size:15px;color:var(--text-bright)">Manual Mission</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Configure your own mission. Select a drone, describe your target, and define the search area.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" placeholder="Type a message..." disabled>
+        <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 3a: 911 INCIDENT LIST ========== -->
+  <div class="screen" id="screen3a">
+    <div class="chat-layout">
+      <div class="chat-messages" id="chat3a">
+        <div class="msg sara">
+          <strong>Active incidents</strong> in your jurisdiction. Select one to begin.
+        </div>
+        <div class="msg sara wide">
+          <!-- Incident 1: Vehicle Pursuit (P1) — THE DEMO PATH -->
+          <div class="drone-select-card" onclick="selectIncident(this, 0)" style="cursor:pointer;border-color:rgba(184,84,84,.3)">
+            <div class="drone-select-header">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="background:var(--red);color:#fff;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.04em">P1</span>
+                  <span style="font-weight:600;font-size:14px;color:var(--text-bright)">Vehicle Pursuit</span>
+                </div>
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:4px">1200 Madison Ave &middot; 9:15 PM &middot; 12 min ago</div>
+              </div>
+            </div>
+            <div class="drone-select-stats">
+              <div><span class="drone-stat-label">Units</span><span class="drone-stat-value" style="color:var(--amber)">3</span></div>
+              <div><span class="drone-stat-label">Suspect</span><span class="drone-stat-value">Red sedan</span></div>
+              <div><span class="drone-stat-label">Direction</span><span class="drone-stat-value">Southbound</span></div>
+              <div><span class="drone-stat-label">Speed</span><span class="drone-stat-value">~45 mph</span></div>
+            </div>
+          </div>
+          <!-- Incident 2: Missing Person (P2) -->
+          <div class="drone-select-card disabled" style="margin-top:8px;opacity:.6">
+            <div class="drone-select-header">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="background:var(--amber);color:#000;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.04em">P2</span>
+                  <span style="font-weight:600;font-size:14px;color:var(--text-bright)">Missing Person</span>
+                </div>
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:4px">Maple Park area &middot; 8:45 PM &middot; 42 min ago</div>
+              </div>
+            </div>
+            <div class="drone-select-stats">
+              <div><span class="drone-stat-label">Units</span><span class="drone-stat-value">1</span></div>
+              <div><span class="drone-stat-label">Subject</span><span class="drone-stat-value">Male, 72</span></div>
+              <div><span class="drone-stat-label">Clothing</span><span class="drone-stat-value">Gray jacket</span></div>
+              <div><span class="drone-stat-label">Last Seen</span><span class="drone-stat-value">42 min</span></div>
+            </div>
+          </div>
+          <!-- Incident 3: Suspicious Vehicle (P3) -->
+          <div class="drone-select-card disabled" style="margin-top:8px;opacity:.4">
+            <div class="drone-select-header">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="background:var(--text-dim);color:var(--text-bright);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.04em">P3</span>
+                  <span style="font-weight:600;font-size:14px;color:var(--text-bright)">Suspicious Vehicle</span>
+                </div>
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:4px">Oak &amp; 5th &middot; 9:30 PM &middot; 2 min ago</div>
+              </div>
+            </div>
+            <div class="drone-select-stats">
+              <div><span class="drone-stat-label">Units</span><span class="drone-stat-value">0</span></div>
+              <div><span class="drone-stat-label">Vehicle</span><span class="drone-stat-value">Black van</span></div>
+              <div><span class="drone-stat-label">Activity</span><span class="drone-stat-value">Idling</span></div>
+              <div><span class="drone-stat-label">Duration</span><span class="drone-stat-value">~15 min</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" placeholder="Type a message...">
+        <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 4a: SARA 911 ANALYSIS ========== -->
+  <div class="screen" id="screen4a">
+    <div class="chat-layout">
+      <div class="chat-messages" id="chat4a">
+        <div class="msg sara">
+          Analyzing <strong>3 dispatches</strong> related to incident #4471...
+        </div>
+        <!-- Thinking block 1 -->
+        <div class="msg sara wide" style="background:rgba(168,149,64,.06);border-left:2px solid var(--amber);padding-left:14px;border-radius:0 var(--radius) var(--radius) 0">
+          <div style="display:flex;align-items:center;gap:6px;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            <span class="material-symbols-outlined" style="font-size:14px;color:var(--amber)">expand_more</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em">Dispatch #1 &mdash; 9:03 PM</span>
+            <span style="font-family:var(--mono);font-size:9px;color:var(--green);margin-left:auto">HIGH CONFIDENCE</span>
+          </div>
+          <div style="display:none;margin-top:8px;padding:8px;background:rgba(0,0,0,.2);border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--text-secondary);line-height:1.6">
+            "...reporting a <strong style="color:var(--text-bright)">red sedan</strong>, possibly Honda, heading <strong style="color:var(--text-bright)">southbound on Madison</strong>... driver appears to be male, dark clothing... speed approximately <strong style="color:var(--text-bright)">45 miles per hour</strong>..."
+          </div>
+        </div>
+        <!-- Thinking block 2 -->
+        <div class="msg sara wide" style="background:rgba(168,149,64,.06);border-left:2px solid var(--amber);padding-left:14px;border-radius:0 var(--radius) var(--radius) 0">
+          <div style="display:flex;align-items:center;gap:6px;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            <span class="material-symbols-outlined" style="font-size:14px;color:var(--amber)">expand_more</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em">Dispatch #2 &mdash; 9:12 PM</span>
+            <span style="font-family:var(--mono);font-size:9px;color:var(--amber);margin-left:auto">MEDIUM CONFIDENCE</span>
+          </div>
+          <div style="display:none;margin-top:8px;padding:8px;background:rgba(0,0,0,.2);border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--text-secondary);line-height:1.6">
+            "...Unit 42 has visual, vehicle now near <strong style="color:var(--text-bright)">Madison and Oak</strong>... partial plate ends in <strong style="color:var(--text-bright)">7X3</strong>... erratic driving, headlights on..."
+          </div>
+        </div>
+        <!-- Extracted facts -->
+        <div class="msg sara">
+          <strong>Extracted target profile:</strong>
+        </div>
+        <div class="msg sara wide">
+          <div class="drone-card" style="margin:0">
+            <div class="meta-item">
+              <span class="meta-label">Vehicle</span>
+              <span class="meta-value">Red sedan (Honda)</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Plate</span>
+              <span class="meta-value">Partial &mdash; ***7X3</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Last Seen</span>
+              <span class="meta-value">Madison &amp; Oak</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Speed</span>
+              <span class="meta-value">~45 mph southbound</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Suspect</span>
+              <span class="meta-value">Male, dark clothing</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Responding</span>
+              <span class="meta-value" style="color:var(--amber)">3 units</span>
+            </div>
+          </div>
+        </div>
+        <div class="msg sara">
+          Ready to select a drone for this mission?
+          <div class="choices">
+            <button class="choice-btn primary" onclick="goToScreen('5a')">Select Drone</button>
+            <button class="choice-btn">Edit Target Info</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" placeholder="Type a message...">
+        <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 5a: DRONE SELECTION (911) ========== -->
+  <div class="screen" id="screen5a">
+    <div class="chat-layout">
+      <div class="chat-messages" id="chat5a">
+        <div class="msg sara">
+          Available drones sorted by <strong>proximity to incident</strong>.
+        </div>
+        <div class="msg sara wide">
+          <!-- Drone 1: Closest, available -->
+          <div class="drone-select-card" onclick="selectDrone(this)" style="cursor:pointer">
+            <div class="drone-select-header">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--text-bright)">Delta SA-064</div>
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text-ghost);margin-top:2px">SN DSA-0064-R &middot; <span style="color:var(--green)">1.2 km from incident</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <div style="width:6px;height:6px;background:var(--green);border-radius:50%"></div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--green)">AVAILABLE</span>
+              </div>
+            </div>
+            <div class="drone-select-stats">
+              <div><span class="drone-stat-label">Battery</span><span class="drone-stat-value" style="color:var(--amber)">67%</span></div>
+              <div><span class="drone-stat-label">Signal</span><span class="drone-stat-value" style="color:var(--green)">Strong</span></div>
+              <div><span class="drone-stat-label">ETA</span><span class="drone-stat-value">~2 min</span></div>
+              <div><span class="drone-stat-label">Range</span><span class="drone-stat-value">12 km</span></div>
+            </div>
+          </div>
+          <!-- Drone 2: Farther, available -->
+          <div class="drone-select-card" onclick="selectDrone(this)" style="cursor:pointer">
+            <div class="drone-select-header">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--text-bright)">Delta SA-128</div>
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text-ghost);margin-top:2px">SN DSA-0128-X &middot; <span style="color:var(--text-secondary)">3.8 km from incident</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <div style="width:6px;height:6px;background:var(--green);border-radius:50%"></div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--green)">AVAILABLE</span>
+              </div>
+            </div>
+            <div class="drone-select-stats">
+              <div><span class="drone-stat-label">Battery</span><span class="drone-stat-value" style="color:var(--green)">98%</span></div>
+              <div><span class="drone-stat-label">Signal</span><span class="drone-stat-value" style="color:var(--green)">Strong</span></div>
+              <div><span class="drone-stat-label">ETA</span><span class="drone-stat-value">~5 min</span></div>
+              <div><span class="drone-stat-label">Range</span><span class="drone-stat-value">15 km</span></div>
+            </div>
+          </div>
+          <!-- Drone 3: In use -->
+          <div class="drone-select-card disabled">
+            <div class="drone-select-header">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--text-ghost)">Delta SA-256</div>
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text-ghost);margin-top:2px">SN DSA-0256-K &middot; 5.1 km from incident</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <div style="width:6px;height:6px;background:var(--amber);border-radius:50%"></div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--amber)">IN MISSION</span>
+              </div>
+            </div>
+            <div class="drone-select-stats">
+              <div><span class="drone-stat-label">Operator</span><span class="drone-stat-value">J. Torres</span></div>
+              <div><span class="drone-stat-label">Battery</span><span class="drone-stat-value">54%</span></div>
+              <div><span class="drone-stat-label">ETA</span><span class="drone-stat-value">&mdash;</span></div>
+              <div><span class="drone-stat-label">Range</span><span class="drone-stat-value">15 km</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" placeholder="Type a message...">
+        <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 6a: MISSION BRIEFING ========== -->
+  <div class="screen" id="screen6a">
+    <div class="chat-layout">
+      <div class="chat-messages" id="chat6a">
+        <div class="msg sara">
+          <strong>Mission briefing</strong> &mdash; Incident #4471
+        </div>
+        <div class="msg sara wide">
+          <div class="drone-card" style="margin:0">
+            <div class="meta-item">
+              <span class="meta-label">Target</span>
+              <span class="meta-value">Red sedan (Honda) &mdash; ***7X3</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Last Known</span>
+              <span class="meta-value">Madison &amp; Oak, southbound</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Drone</span>
+              <span class="meta-value">Delta SA-064 &middot; ETA 2 min</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Units on Scene</span>
+              <span class="meta-value" style="color:var(--amber)">3 responding</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Search Area</span>
+              <span class="meta-value">Auto &mdash; 500m radius from last known</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Priority</span>
+              <span class="meta-value" style="color:var(--red)">P1 &mdash; Active Pursuit</span>
+            </div>
+          </div>
+        </div>
+        <div class="msg sara">
+          SARA will monitor <strong>live dispatch radio</strong> for updates during the mission. I'll auto-adjust the search area if new information comes in.
+        </div>
+        <div class="msg sara">
+          Ready to define the search area?
+          <div class="choices">
+            <button class="choice-btn primary" onclick="goToScreen('7')">Set Search Area</button>
+            <button class="choice-btn">Adjust Parameters</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" placeholder="Type a message...">
+        <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 3b: DRONE SELECTION (Manual) ========== -->
+  <div class="screen" id="screen3b">
+    <div class="chat-layout">
+      <div class="chat-messages" id="chat3b">
         <div class="msg sara wide">
           Select a drone to begin your mission.
           <div class="drone-select-card" onclick="selectDrone(this)" style="cursor:pointer">
@@ -1783,10 +2111,10 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 3: MISSION SETUP - TARGET ========== -->
-  <div class="screen" id="screen3">
+  <!-- ========== SCREEN 4b: MISSION SETUP - TARGET (Manual) ========== -->
+  <div class="screen" id="screen4b">
     <div class="chat-layout">
-      <div class="chat-messages" id="chat3">
+      <div class="chat-messages" id="chat4b">
         <div class="msg sara">
           Drone connected successfully! Now let's set up your mission.
         </div>
@@ -1823,7 +2151,7 @@ body.wireframe .msg strong { font-weight: 600; }
           <strong>Red Nissan Pathfinder</strong> with black roof rack and rear bumper dent.<br><br>
           Ready to set up the search area?
           <div class="choices">
-            <button class="choice-btn primary" onclick="goToScreen(4)">Yes, Set Search Area</button>
+            <button class="choice-btn primary" onclick="goToScreen('7')">Yes, Set Search Area</button>
             <button class="choice-btn">Edit Target</button>
           </div>
         </div>
@@ -1835,8 +2163,8 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 4: SEARCH AREA (MAP VIEW) ========== -->
-  <div class="screen" id="screen4">
+  <!-- ========== SCREEN 7: SEARCH AREA (MAP VIEW) ========== -->
+  <div class="screen" id="screen7">
     <div class="split-layout">
       <div class="split-map">
         <div class="map-bg"></div>
@@ -1847,8 +2175,8 @@ body.wireframe .msg strong { font-weight: 600; }
           <div class="map-road road-v1"></div>
           <div class="map-road road-v2"></div>
         </div>
-        <div class="fade-overlay" id="fadeOverlay4"></div>
-        <div class="mission-circle" id="missionCircle4" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%)">
+        <div class="fade-overlay" id="fadeOverlay7"></div>
+        <div class="mission-circle" id="missionCircle7" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%)">
           <div class="circle-handle handle-top"></div>
           <div class="circle-handle handle-bottom"></div>
           <div class="circle-handle handle-left"></div>
@@ -1858,7 +2186,7 @@ body.wireframe .msg strong { font-weight: 600; }
           <div class="pulse"></div>
           <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
         </div>
-        <svg class="lawnmower" id="lawnmower4" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px">
+        <svg class="lawnmower" id="lawnmower7" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px">
           <path d="M40,50 L220,50 L220,90 L40,90 L40,130 L220,130 L220,170 L40,170 L40,210 L220,210" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="6,4"/>
         </svg>
         <div class="shape-toggle">
@@ -1867,11 +2195,11 @@ body.wireframe .msg strong { font-weight: 600; }
           <div class="shape-option disabled">Linear (Coming Soon)</div>
         </div>
         <div class="map-actions">
-          <button class="map-btn map-btn-primary" id="doneBtn4" onclick="completeBoundary()"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">check_circle</span>DONE</button>
+          <button class="map-btn map-btn-primary" id="doneBtn7" onclick="completeBoundary()"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">check_circle</span>DONE</button>
         </div>
       </div>
       <div class="split-chat">
-        <div class="chat-messages" id="chat4">
+        <div class="chat-messages" id="chat7">
           <div class="msg sara">
             Position the mission boundary on the map. The circle shows the default search area around your drone.
           </div>
@@ -1887,8 +2215,8 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 5: TAKEOFF ========== -->
-  <div class="screen" id="screen5">
+  <!-- ========== SCREEN 8: TAKEOFF ========== -->
+  <div class="screen" id="screen8">
     <div class="split-layout">
       <div class="split-map">
         <div class="map-bg"></div>
@@ -1909,11 +2237,11 @@ body.wireframe .msg strong { font-weight: 600; }
           <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
         </div>
         <div class="map-actions">
-          <button class="map-btn map-btn-launch" onclick="goToScreen(6)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">rocket_launch</span>Launch Mission</button>
+          <button class="map-btn map-btn-launch" onclick="goToScreen('9')"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">rocket_launch</span>Launch Mission</button>
         </div>
       </div>
       <div class="split-chat">
-        <div class="chat-messages" id="chat5">
+        <div class="chat-messages" id="chat8">
           <div class="msg sara">
             Running pre-flight checks...
           </div>
@@ -1939,8 +2267,8 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 6: MISSION IN PROGRESS ========== -->
-  <div class="screen" id="screen6">
+  <!-- ========== SCREEN 9: MISSION IN PROGRESS ========== -->
+  <div class="screen" id="screen9">
     <div class="split-layout">
       <div class="video-feed">
         <div class="video-static"></div>
@@ -1960,7 +2288,7 @@ body.wireframe .msg strong { font-weight: 600; }
         <div class="hud-text hud-text-bl">REC &bull; 00:04:23</div>
         <div class="hud-text hud-text-br">DSA-128 &bull; SEARCHING</div>
         <div class="exec-actions">
-          <button class="exec-btn abort-btn" onclick="goToScreen(9)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">pause_circle</span>Pause / Abort</button>
+          <button class="exec-btn abort-btn" onclick="goToScreen('12')"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">pause_circle</span>Pause / Abort</button>
         </div>
         <div class="map-thumbnail">
           <div class="view-toggle" onclick="toggleView(this)" title="Toggle map/video"><svg viewBox="0 0 24 24"><path d="M3 5v14h18V5H3zm4 2v10H5V7h2zm10 0v10h-2V7h2zm2 0h2v10h-2V7zM9 7h6v10H9V7z"/></svg></div>
@@ -1987,7 +2315,7 @@ body.wireframe .msg strong { font-weight: 600; }
         </div>
       </div>
       <div class="split-chat">
-        <div class="chat-messages" id="chat6">
+        <div class="chat-messages" id="chat9">
           <div class="msg sara">
             Drone taking off. To abort, press <strong>Pause/Abort</strong> or type it in chat.
           </div>
@@ -2003,20 +2331,20 @@ body.wireframe .msg strong { font-weight: 600; }
         </div>
         <div class="chat-input-bar">
           <input class="chat-input" placeholder="Type a message...">
-          <button class="send-btn" onclick="goToScreen(7)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          <button class="send-btn" onclick="goToScreen('10')"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
         </div>
         <div style="text-align:right;margin-top:4px">
-          <span style="font-family:var(--mono);font-size:9px;color:#444;cursor:pointer;text-decoration:underline;text-decoration-color:#333" onclick="goToScreen(7)">simulate target found &rarr;</span>
+          <span style="font-family:var(--mono);font-size:9px;color:#444;cursor:pointer;text-decoration:underline;text-decoration-color:#333" onclick="goToScreen('10')">simulate target found &rarr;</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========== SCREEN 7: TARGET SPOTTED ========== -->
-  <div class="screen" id="screen7">
+  <!-- ========== SCREEN 10: TARGET SPOTTED ========== -->
+  <div class="screen" id="screen10">
     <div class="split-layout">
       <div class="video-feed">
-        <div class="alert-flash visible" id="alertFlash7"></div>
+        <div class="alert-flash visible" id="alertFlash10"></div>
         <div class="video-static"></div>
         <div class="crosshair"></div>
         <div class="sim-road sim-road-1"></div>
@@ -2040,7 +2368,7 @@ body.wireframe .msg strong { font-weight: 600; }
         <div class="hud-text hud-text-bl" style="color:var(--red)">&#9679; REC &bull; 00:12:47</div>
         <div class="hud-text hud-text-br">DSA-128 &bull; ORBIT MODE</div>
         <div class="exec-actions">
-          <button class="exec-btn abort-btn" onclick="goToScreen(9)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">warning</span>Abort Mission</button>
+          <button class="exec-btn abort-btn" onclick="goToScreen('12')"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">warning</span>Abort Mission</button>
         </div>
         <div class="map-thumbnail">
           <div class="view-toggle" onclick="toggleView(this)" title="Toggle map/video"><svg viewBox="0 0 24 24"><path d="M3 5v14h18V5H3zm4 2v10H5V7h2zm10 0v10h-2V7h2zm2 0h2v10h-2V7zM9 7h6v10H9V7z"/></svg></div>
@@ -2067,7 +2395,7 @@ body.wireframe .msg strong { font-weight: 600; }
         </div>
       </div>
       <div class="split-chat">
-        <div class="chat-messages" id="chat7">
+        <div class="chat-messages" id="chat10">
           <div class="msg sara" style="background:var(--red-dim);border-color:rgba(255,255,255,.25)">
             <div class="sender" style="color:var(--red)">&#9888; SARA ALERT &bull; 09:52:47</div>
             <strong>Potential target spotted!</strong> Entering orbit mode for close inspection.
@@ -2076,8 +2404,8 @@ body.wireframe .msg strong { font-weight: 600; }
             I've detected a <strong>red SUV</strong> matching your target description at coordinates 23.2817, 20.8772.<br><br>
             The drone is now orbiting for a closer look. Please confirm: <strong>Is this your target?</strong>
             <div class="choices">
-              <button class="choice-btn primary" onclick="goToScreen(8)">Yes, Confirm Target</button>
-              <button class="choice-btn danger" onclick="goToScreen(6)">No, Continue Search</button>
+              <button class="choice-btn primary" onclick="goToScreen('11')">Yes, Confirm Target</button>
+              <button class="choice-btn danger" onclick="goToScreen('9')">No, Continue Search</button>
             </div>
           </div>
         </div>
@@ -2089,8 +2417,8 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 8: ORBITING TARGET ========== -->
-  <div class="screen" id="screen8">
+  <!-- ========== SCREEN 11: ORBITING TARGET ========== -->
+  <div class="screen" id="screen11">
     <div class="split-layout">
       <div class="video-feed">
         <div class="video-static"></div>
@@ -2118,8 +2446,8 @@ body.wireframe .msg strong { font-weight: 600; }
         <div class="hud-text hud-text-bl">&#9679; REC &bull; 00:15:23</div>
         <div class="hud-text hud-text-br">DSA-128 &bull; ORBIT ACTIVE</div>
         <div class="exec-actions">
-          <button class="exec-btn" onclick="goToScreen(9)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">home</span>Return Home</button>
-          <button class="exec-btn abort-btn" onclick="goToScreen(9)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">warning</span>Abort</button>
+          <button class="exec-btn" onclick="goToScreen('12')"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">home</span>Return Home</button>
+          <button class="exec-btn abort-btn" onclick="goToScreen('12')"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">warning</span>Abort</button>
         </div>
         <div class="map-thumbnail">
           <div class="view-toggle" onclick="toggleView(this)" title="Toggle map/video"><svg viewBox="0 0 24 24"><path d="M3 5v14h18V5H3zm4 2v10H5V7h2zm10 0v10h-2V7h2zm2 0h2v10h-2V7zM9 7h6v10H9V7z"/></svg></div>
@@ -2147,7 +2475,7 @@ body.wireframe .msg strong { font-weight: 600; }
         </div>
       </div>
       <div class="split-chat">
-        <div class="chat-messages" id="chat8">
+        <div class="chat-messages" id="chat11">
           <div class="msg sara" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2)">
             <strong>Target confirmed.</strong> Keeping orbit active until further instruction.
           </div>
@@ -2175,8 +2503,8 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 9: RETURNING HOME / LANDING ========== -->
-  <div class="screen" id="screen9">
+  <!-- ========== SCREEN 12: RETURNING HOME / LANDING ========== -->
+  <div class="screen" id="screen12">
     <div class="split-layout">
       <div class="split-map" style="display:flex;flex-direction:column">
         <div style="flex:1;position:relative">
@@ -2210,7 +2538,7 @@ body.wireframe .msg strong { font-weight: 600; }
         </div>
       </div>
       <div class="split-chat">
-        <div class="chat-messages" id="chat9">
+        <div class="chat-messages" id="chat12">
           <div class="msg sara">
             <strong>Drone returning home.</strong> Estimated arrival: 2 minutes 30 seconds.
           </div>
@@ -2223,7 +2551,7 @@ body.wireframe .msg strong { font-weight: 600; }
           <div class="msg sara">
             Touchdown confirmed. Motors disarmed.
             <div style="margin-top:12px">
-              <button class="choice-btn primary" onclick="goToScreen(10)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">summarize</span>View Mission Summary</button>
+              <button class="choice-btn primary" onclick="goToScreen('13')"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">summarize</span>View Mission Summary</button>
             </div>
           </div>
         </div>
@@ -2235,10 +2563,10 @@ body.wireframe .msg strong { font-weight: 600; }
     </div>
   </div>
 
-  <!-- ========== SCREEN 10: MISSION COMPLETED ========== -->
-  <div class="screen" id="screen10">
+  <!-- ========== SCREEN 13: MISSION COMPLETED ========== -->
+  <div class="screen" id="screen13">
     <div class="chat-layout">
-      <div class="chat-messages" id="chat10">
+      <div class="chat-messages" id="chat13">
         <div class="msg sara">
           <strong>Mission completed.</strong> Here's your mission summary:
           <div class="summary-card">
@@ -2275,7 +2603,7 @@ body.wireframe .msg strong { font-weight: 600; }
           Flight recording and mission data have been saved.<br><br>
           <strong>It is now safe to turn off your drone.</strong>
           <div style="margin-top:16px">
-            <button class="choice-btn primary" onclick="goToScreen(1)"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">restart_alt</span>Start New Mission</button>
+            <button class="choice-btn primary" onclick="resetMission()"><span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">restart_alt</span>Start New Mission</button>
           </div>
         </div>
       </div>
@@ -2288,16 +2616,7 @@ body.wireframe .msg strong { font-weight: 600; }
 
   <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <div class="nav-dot active" data-screen="1"></div>
-    <div class="nav-dot" data-screen="2"></div>
-    <div class="nav-dot" data-screen="3"></div>
-    <div class="nav-dot" data-screen="4"></div>
-    <div class="nav-dot" data-screen="5"></div>
-    <div class="nav-dot" data-screen="6"></div>
-    <div class="nav-dot" data-screen="7"></div>
-    <div class="nav-dot" data-screen="8"></div>
-    <div class="nav-dot" data-screen="9"></div>
-    <div class="nav-dot" data-screen="10"></div>
+    <div id="navDotsContainer" style="display:flex;gap:6px"></div>
     <div class="nav-arrows">
       <div class="nav-arrow disabled" id="prevBtn" onclick="prevScreen()"><span class="material-symbols-outlined" style="font-size:16px">arrow_back</span></div>
       <div class="nav-arrow" id="nextBtn" onclick="nextScreen()"><span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span></div>
@@ -2434,56 +2753,153 @@ body.wireframe .msg strong { font-weight: 600; }
     document.body.classList.add('wireframe');
   }
 
-  let currentScreen = 1;
-  const totalScreens = 10;
+  let currentScreen = '1';
+  let currentPath = null; // '911' or 'manual'
+
+  const paths = {
+    '911':    ['1','2','3a','4a','5a','6a','7','8','9','10','11','12','13'],
+    'manual': ['1','2','3b','4b','7','8','9','10','11','12','13']
+  };
 
   const stateConfig = {
-    1:  { text: 'Authenticate', dot: 'dot-yellow' },
-    2:  { text: 'Select Drone', dot: 'dot-yellow' },
-    3:  { text: 'Mission Setup', dot: 'dot-blue' },
-    4:  { text: 'Mission Setup — Search Area', dot: 'dot-blue' },
-    5:  { text: 'Takeoff', dot: 'dot-green' },
-    6:  { text: 'Mission in Progress', dot: 'dot-green' },
-    7:  { text: 'Target Spotted', dot: 'dot-red' },
-    8:  { text: 'Orbiting Target', dot: 'dot-red' },
-    9:  { text: 'Returning Home', dot: 'dot-yellow' },
-    10: { text: 'Mission Completed', dot: 'dot-green' },
+    '1':  { text: 'Authenticate', dot: 'dot-yellow' },
+    '2':  { text: 'Select Path', dot: 'dot-yellow' },
+    '3a': { text: '911 — Incidents', dot: 'dot-red' },
+    '4a': { text: '911 — Analysis', dot: 'dot-red' },
+    '5a': { text: 'Select Drone', dot: 'dot-yellow' },
+    '6a': { text: 'Mission Briefing', dot: 'dot-blue' },
+    '3b': { text: 'Select Drone', dot: 'dot-yellow' },
+    '4b': { text: 'Mission Setup', dot: 'dot-blue' },
+    '7':  { text: 'Search Area', dot: 'dot-blue' },
+    '8':  { text: 'Takeoff', dot: 'dot-green' },
+    '9':  { text: 'Mission in Progress', dot: 'dot-green' },
+    '10': { text: 'Target Spotted', dot: 'dot-red' },
+    '11': { text: 'Orbiting Target', dot: 'dot-red' },
+    '12': { text: 'Returning Home', dot: 'dot-yellow' },
+    '13': { text: 'Mission Completed', dot: 'dot-green' },
   };
 
   function goToScreen(n) {
-    if (n < 1 || n > totalScreens) return;
-    document.getElementById('screen' + currentScreen).classList.remove('active');
-    document.getElementById('screen' + n).classList.add('active');
+    n = String(n);
+    const prev = document.getElementById('screen' + currentScreen);
+    const next = document.getElementById('screen' + n);
+    if (!next) return;
+    if (prev) prev.classList.remove('active');
+    next.classList.add('active');
 
-    document.querySelectorAll('.nav-dot').forEach((dot, i) => {
-      dot.classList.remove('active');
-      if (i + 1 < n) dot.classList.add('completed');
-      if (i + 1 === n) { dot.classList.add('active'); dot.classList.remove('completed'); }
-    });
+    // Update nav dots
+    if (currentPath) {
+      const seq = paths[currentPath];
+      const idx = seq.indexOf(n);
+      document.querySelectorAll('#navDotsContainer .nav-dot').forEach((dot, i) => {
+        dot.classList.remove('active', 'completed');
+        if (i < idx) dot.classList.add('completed');
+        if (i === idx) dot.classList.add('active');
+      });
+    }
 
+    // Update status bar
     const cfg = stateConfig[n];
-    document.getElementById('stateText').textContent = cfg.text;
-    const dot = document.getElementById('stateDot');
-    dot.className = 'dot ' + cfg.dot;
+    if (cfg) {
+      document.getElementById('stateText').textContent = cfg.text;
+      const dot = document.getElementById('stateDot');
+      dot.className = 'dot ' + cfg.dot;
+    }
 
-    document.getElementById('dronePill').classList.toggle('visible', n >= 3);
-    document.getElementById('targetPill').classList.toggle('visible', n >= 4);
-    document.getElementById('boundaryPill').classList.toggle('visible', n >= 5 && n <= 9);
+    // Pills visibility (appear after drone is selected)
+    const afterDrone = currentPath === '911' ? ['6a','7','8','9','10','11','12','13'] : ['4b','7','8','9','10','11','12','13'];
+    const afterTarget = ['7','8','9','10','11','12','13'];
+    const showBoundary = ['8','9','10','11','12'];
 
-    document.getElementById('prevBtn').classList.toggle('disabled', n === 1);
-    document.getElementById('nextBtn').classList.toggle('disabled', n === totalScreens);
+    document.getElementById('dronePill').classList.toggle('visible', afterDrone.includes(n));
+    document.getElementById('targetPill').classList.toggle('visible', afterTarget.includes(n));
+    document.getElementById('boundaryPill').classList.toggle('visible', showBoundary.includes(n));
+
+    // Nav arrows
+    if (currentPath) {
+      const seq = paths[currentPath];
+      const idx = seq.indexOf(n);
+      document.getElementById('prevBtn').classList.toggle('disabled', idx <= 0);
+      document.getElementById('nextBtn').classList.toggle('disabled', idx >= seq.length - 1);
+    }
 
     currentScreen = n;
   }
 
-  function nextScreen() { goToScreen(currentScreen + 1); }
-  function prevScreen() { goToScreen(currentScreen - 1); }
+  function nextScreen() {
+    if (!currentPath) return;
+    const seq = paths[currentPath];
+    const idx = seq.indexOf(currentScreen);
+    if (idx < seq.length - 1) goToScreen(seq[idx + 1]);
+  }
+  function prevScreen() {
+    if (!currentPath) return;
+    const seq = paths[currentPath];
+    const idx = seq.indexOf(currentScreen);
+    if (idx > 0) goToScreen(seq[idx - 1]);
+  }
+
+  function selectPath(path) {
+    currentPath = path;
+    updateNavDots();
+    if (path === '911') {
+      goToScreen('3a');
+    } else {
+      goToScreen('3b');
+    }
+  }
+
+  function selectIncident(card, idx) {
+    if (card.classList.contains('disabled')) return;
+    if (idx !== 0) return;
+    card.classList.add('selected');
+    setTimeout(() => goToScreen('4a'), 400);
+  }
+
+  function updateNavDots() {
+    const container = document.getElementById('navDotsContainer');
+    if (!container || !currentPath) return;
+    const seq = paths[currentPath];
+    container.innerHTML = '';
+    seq.forEach((s, i) => {
+      const d = document.createElement('div');
+      d.className = 'nav-dot';
+      d.dataset.screen = s;
+      if (s === currentScreen) d.classList.add('active');
+      // Mark earlier screens as completed
+      const currentIdx = seq.indexOf(currentScreen);
+      if (i < currentIdx) d.classList.add('completed');
+      d.addEventListener('click', () => goToScreen(s));
+      container.appendChild(d);
+    });
+  }
 
   function selectDrone(card) {
     if (card.classList.contains('disabled')) return;
     document.querySelectorAll('.drone-select-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
-    setTimeout(() => goToScreen(3), 400);
+    if (currentPath === '911') {
+      setTimeout(() => goToScreen('6a'), 400);
+    } else {
+      setTimeout(() => goToScreen('4b'), 400);
+    }
+  }
+
+  function resetMission() {
+    currentPath = null;
+    goToScreen('1');
+    // Reset nav dots to initial 2
+    const c = document.getElementById('navDotsContainer');
+    if (c) {
+      c.innerHTML = '';
+      ['1','2'].forEach((s, i) => {
+        const d = document.createElement('div');
+        d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+        d.dataset.screen = s;
+        d.addEventListener('click', () => goToScreen(s));
+        c.appendChild(d);
+      });
+    }
   }
 
   function toggleView(btn) {
@@ -2492,27 +2908,34 @@ body.wireframe .msg strong { font-weight: 600; }
   }
 
   function completeBoundary() {
-    const circle = document.getElementById('missionCircle4');
+    const circle = document.getElementById('missionCircle7');
     circle.classList.add('locked');
     circle.querySelectorAll('.circle-handle').forEach(h => h.style.display = 'none');
-    document.getElementById('fadeOverlay4').classList.add('visible');
-    document.getElementById('lawnmower4').classList.add('visible');
-    document.getElementById('doneBtn4').textContent = 'Continue to Takeoff';
-    document.getElementById('doneBtn4').onclick = () => goToScreen(5);
+    document.getElementById('fadeOverlay7').classList.add('visible');
+    document.getElementById('lawnmower7').classList.add('visible');
+    document.getElementById('doneBtn7').textContent = 'Continue to Takeoff';
+    document.getElementById('doneBtn7').onclick = () => goToScreen('8');
 
-    const chat = document.getElementById('chat4');
+    const chat = document.getElementById('chat7');
     const msg = document.createElement('div');
     msg.className = 'msg sara';
     chat.appendChild(msg);
     chat.scrollTop = chat.scrollHeight;
   }
 
-  document.querySelectorAll('.nav-dot').forEach(dot => {
-    dot.addEventListener('click', () => {
-      const s = parseInt(dot.dataset.screen);
-      if (s) goToScreen(s);
-    });
-  });
+  // Initial nav dots (before path is selected, just show 2)
+  (function(){
+    const c = document.getElementById('navDotsContainer');
+    if (c) {
+      ['1','2'].forEach((s, i) => {
+        const d = document.createElement('div');
+        d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+        d.dataset.screen = s;
+        d.addEventListener('click', () => goToScreen(s));
+        c.appendChild(d);
+      });
+    }
+  })();
 
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') nextScreen();
