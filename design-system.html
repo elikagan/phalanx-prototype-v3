@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phalanx Design System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: letter; margin: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #18181b;
+    color: #b4b4bc;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 8.5in;
+    height: 11in;
+    padding: 0.65in 0.75in 0.75in;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* Header */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #2c2c33;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 600; color: #d0d0d6; letter-spacing: -0.3px; }
+  .page-header .accent { color: #5f8fad; }
+  .page-header .subtitle { font-size: 11px; color: #6e6e78; margin-top: 3px; }
+  .page-header .meta { text-align: right; font-size: 10px; color: #4e4e56; line-height: 1.6; }
+
+  /* Section */
+  .section { margin-bottom: 24px; }
+  .section-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #4e4e56;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: #2c2c33; }
+
+  /* Color Swatches */
+  .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .color-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .color-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .color-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .color-card { border: 1px solid #2c2c33; border-radius: 8px; overflow: hidden; }
+  .color-swatch { height: 44px; position: relative; }
+  .color-swatch-sm { height: 32px; }
+  .color-info { padding: 7px 9px; background: #212126; }
+  .color-name { font-size: 9.5px; font-weight: 500; color: #b4b4bc; margin-bottom: 1px; }
+  .color-var { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 7.5px; color: #4e4e56; }
+  .color-hex { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 7.5px; color: #6e6e78; margin-top: 1px; }
+
+  /* Typography */
+  .type-row { display: flex; align-items: baseline; gap: 16px; padding: 8px 0; border-bottom: 1px solid #242429; }
+  .type-label { width: 90px; font-size: 9px; font-weight: 600; color: #4e4e56; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; }
+  .type-sample { flex: 1; }
+  .type-meta { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #4e4e56; width: 140px; text-align: right; flex-shrink: 0; }
+
+  /* Spacing */
+  .spacing-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
+  .spacing-item { text-align: center; }
+  .spacing-box { background: rgba(95,143,173,0.12); border: 1px solid rgba(95,143,173,0.25); border-radius: 4px; margin-bottom: 4px; }
+  .spacing-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6e6e78; }
+  .spacing-px { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #4e4e56; }
+
+  /* Components */
+  .component-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 10px; font-size: 9.5px; font-weight: 600; letter-spacing: 0.03em; }
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 500; border: 1px solid #2c2c33; cursor: pointer; }
+  .nav-preview { width: 200px; background: #141417; border-radius: 8px; padding: 8px 0; border: 1px solid #2c2c33; }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 18px; font-size: 11px; border-left: 2px solid transparent; }
+
+  /* Usage note */
+  .usage-note { background: #212126; border: 1px solid #2c2c33; border-radius: 6px; padding: 8px 12px; font-size: 9.5px; color: #6e6e78; line-height: 1.7; margin-top: 8px; }
+  .usage-note code { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 8.5px; background: #18181b; padding: 1px 4px; border-radius: 3px; color: #7da8c2; }
+
+  /* Footer */
+  .page-footer { position: absolute; bottom: 0.6in; left: 0.75in; right: 0.75in; display: flex; justify-content: space-between; font-size: 8px; color: #4e4e56; padding-top: 8px; border-top: 1px solid #242429; }
+
+  /* Eco table */
+  .eco-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .eco-table th { text-align: left; font-size: 0.68rem; font-weight: 600; color: #4e4e56; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 10px; border-bottom: 1px solid #2c2c33; }
+  .eco-table td { padding: 7px 10px; border-bottom: 1px solid #242429; color: #6e6e78; }
+  .eco-table td:first-child { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 10px; color: #b4b4bc; }
+</style>
+</head>
+<body>
+
+<!-- ==================== PAGE 1: Palette ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1><span class="accent">Phalanx</span> Design System</h1>
+      <p class="subtitle">Edge Dashboard Color &amp; Typography Reference</p>
+    </div>
+    <div class="meta">
+      USAvionix / Phalanx Ecosystem<br>
+      Version 2.0 &mdash; March 2026<br>
+      Source: phalanx_ai_engine/edge_dashboard
+    </div>
+  </div>
+
+  <!-- Ecosystem -->
+  <div class="section">
+    <div class="section-title">Ecosystem</div>
+    <table class="eco-table">
+      <thead><tr><th>Repository</th><th>Purpose</th><th>Stack</th></tr></thead>
+      <tbody>
+        <tr><td>phalanx_ai_engine</td><td>On-board inference + edge dashboard</td><td>Python, Flask, TensorRT</td></tr>
+        <tr><td>phalanx_edge_command</td><td>CLI to manage edge boards</td><td>Python, Shell</td></tr>
+        <tr><td>athena_armory</td><td>Model &amp; data asset management</td><td>Next.js, MongoDB, Tailwind</td></tr>
+        <tr><td>athena_model_annotate</td><td>Labeling / annotation tool</td><td>Next.js, Canvas</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Background & Surface Colors -->
+  <div class="section">
+    <div class="section-title">Backgrounds &amp; Surfaces</div>
+    <div class="color-grid-5">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #141417;"></div>
+        <div class="color-info">
+          <div class="color-name">Sidebar</div>
+          <div class="color-var">--bg-sidebar</div>
+          <div class="color-hex">#141417</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #18181b;"></div>
+        <div class="color-info">
+          <div class="color-name">Body / Input</div>
+          <div class="color-var">--bg-body</div>
+          <div class="color-hex">#18181B</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f;"></div>
+        <div class="color-info">
+          <div class="color-name">Content Area</div>
+          <div class="color-var">--bg-content</div>
+          <div class="color-hex">#1C1C1F</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #212126;"></div>
+        <div class="color-info">
+          <div class="color-name">Card</div>
+          <div class="color-var">--bg-card</div>
+          <div class="color-hex">#212126</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #28282e;"></div>
+        <div class="color-info">
+          <div class="color-name">Card Hover</div>
+          <div class="color-var">--bg-card-hover</div>
+          <div class="color-hex">#28282E</div>
+        </div>
+      </div>
+    </div>
+    <div class="usage-note">
+      <strong style="color: #d0d0d6;">Layering:</strong>
+      Sidebar (<code>#141417</code>) &rarr; Body (<code>#18181B</code>) &rarr; Content (<code>#1C1C1F</code>) &rarr; Card (<code>#212126</code>) &rarr; Hover (<code>#28282E</code>).
+      Each layer is 4-6 steps lighter, creating subtle depth.
+    </div>
+  </div>
+
+  <!-- Borders -->
+  <div class="section">
+    <div class="section-title">Borders</div>
+    <div class="color-grid-2">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; border-bottom: 3px solid #2c2c33;">
+          <div style="position: absolute; bottom: 6px; left: 10px; font-size: 8px; color: #4e4e56;">Standard border</div>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Border</div>
+          <div class="color-var">--border</div>
+          <div class="color-hex">#2C2C33</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; border-bottom: 3px solid #242429;">
+          <div style="position: absolute; bottom: 6px; left: 10px; font-size: 8px; color: #4e4e56;">Divider / subtle</div>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Border Light</div>
+          <div class="color-var">--border-light</div>
+          <div class="color-hex">#242429</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accent -->
+  <div class="section">
+    <div class="section-title">Accent &mdash; Steel Blue</div>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #5f8fad;"></div>
+        <div class="color-info">
+          <div class="color-name">Accent</div>
+          <div class="color-var">--accent</div>
+          <div class="color-hex">#5F8FAD</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #7da8c2;"></div>
+        <div class="color-info">
+          <div class="color-name">Accent Text</div>
+          <div class="color-var">--accent-text</div>
+          <div class="color-hex">#7DA8C2</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: rgba(95,143,173,0.08); border: 1px solid rgba(95,143,173,0.2);"></div>
+        <div class="color-info">
+          <div class="color-name">Accent Dim</div>
+          <div class="color-var">--accent-dim</div>
+          <div class="color-hex">rgba(95,143,173,0.08)</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #3d6b85;"></div>
+        <div class="color-info">
+          <div class="color-name">Primary Button</div>
+          <div class="color-var">.btn-primary</div>
+          <div class="color-hex">#3D6B85 &rarr; #4A7A96</div>
+        </div>
+      </div>
+    </div>
+    <div class="usage-note">
+      Links: <code>#8eadc4</code> default, <code>#a3c0d4</code> on hover.
+      Focus borders: <code>var(--accent)</code>. Detection count badges: <code>rgba(95,143,173,0.15)</code> bg + <code>--accent-text</code>.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Phalanx Design System v2.0</span>
+    <span>Page 1 of 4</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2: Text + Status + Sidebar ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1><span class="accent">Phalanx</span> Design System</h1>
+      <p class="subtitle">Text Hierarchy, Status Colors &amp; Sidebar</p>
+    </div>
+    <div class="meta">Colors</div>
+  </div>
+
+  <!-- Text Colors -->
+  <div class="section">
+    <div class="section-title">Text Hierarchy</div>
+    <div class="color-grid-5">
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 18px; font-weight: 600; color: #d0d0d6;">Aa</span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Heading</div>
+          <div class="color-var">page-header h1</div>
+          <div class="color-hex">#D0D0D6</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 18px; font-weight: 600; color: #c8c8d0;">Aa</span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Stat Value</div>
+          <div class="color-var">.stat-value</div>
+          <div class="color-hex">#C8C8D0</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 18px; font-weight: 400; color: #b4b4bc;">Aa</span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Body Text</div>
+          <div class="color-var">--text</div>
+          <div class="color-hex">#B4B4BC</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 18px; font-weight: 400; color: #6e6e78;">Aa</span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Muted</div>
+          <div class="color-var">--text-muted</div>
+          <div class="color-hex">#6E6E78</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 18px; font-weight: 400; color: #4e4e56;">Aa</span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Dim</div>
+          <div class="color-var">--text-dim</div>
+          <div class="color-hex">#4E4E56</div>
+        </div>
+      </div>
+    </div>
+    <div class="usage-note">
+      Code/mono: <code>#808088</code> using SF Mono / Fira Code / Consolas.
+      Section labels and stat labels use <code>--text-dim</code> (#4E4E56) with uppercase + letter-spacing.
+    </div>
+  </div>
+
+  <!-- Status Colors -->
+  <div class="section">
+    <div class="section-title">Status &amp; LED Colors</div>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch color-swatch-sm" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #4a9a65; box-shadow: 0 0 4px rgba(74,154,101,0.4);"></span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Green (Up/Active)</div>
+          <div class="color-var">--green</div>
+          <div class="color-hex">#4A9A65</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch color-swatch-sm" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #b85454; box-shadow: 0 0 4px rgba(184,84,84,0.4);"></span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Red (Down/Error)</div>
+          <div class="color-var">--red</div>
+          <div class="color-hex">#B85454</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch color-swatch-sm" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #a89540; box-shadow: 0 0 4px rgba(168,149,64,0.4);"></span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Yellow (Warning)</div>
+          <div class="color-var">--yellow</div>
+          <div class="color-hex">#A89540</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch color-swatch-sm" style="background: #1c1c1f; display: flex; align-items: center; justify-content: center;">
+          <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #5a8fbf; box-shadow: 0 0 4px rgba(90,143,191,0.4);"></span>
+        </div>
+        <div class="color-info">
+          <div class="color-name">Blue (Info/LED)</div>
+          <div class="color-var">.led-dot.blue</div>
+          <div class="color-hex">#5A8FBF</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status dim backgrounds -->
+    <div style="margin-top: 10px;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; font-size: 0.65rem; font-weight: 600; color: #4e4e56; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 10px; border-bottom: 1px solid #2c2c33;">Context</th>
+            <th style="text-align: left; font-size: 0.65rem; font-weight: 600; color: #4e4e56; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 10px; border-bottom: 1px solid #2c2c33;">Solid</th>
+            <th style="text-align: left; font-size: 0.65rem; font-weight: 600; color: #4e4e56; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 10px; border-bottom: 1px solid #2c2c33;">Dim BG</th>
+            <th style="text-align: left; font-size: 0.65rem; font-weight: 600; color: #4e4e56; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 10px; border-bottom: 1px solid #2c2c33;">Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #b4b4bc;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#4a9a65;margin-right:5px;vertical-align:middle;"></span>Green</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #6e6e78; font-family: 'JetBrains Mono', monospace; font-size: 9px;">#4A9A65</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #6e6e78; font-family: 'JetBrains Mono', monospace; font-size: 9px;">rgba(74,154,101,0.10)</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #4e4e56;">Service up badges, LED dots, toast .ok</td>
+          </tr>
+          <tr>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #b4b4bc;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#b85454;margin-right:5px;vertical-align:middle;"></span>Red</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #6e6e78; font-family: 'JetBrains Mono', monospace; font-size: 9px;">#B85454</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #6e6e78; font-family: 'JetBrains Mono', monospace; font-size: 9px;">rgba(184,84,84,0.10)</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #4e4e56;">Service down, danger buttons, toast .err</td>
+          </tr>
+          <tr>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #b4b4bc;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#a89540;margin-right:5px;vertical-align:middle;"></span>Yellow</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #6e6e78; font-family: 'JetBrains Mono', monospace; font-size: 9px;">#A89540</td>
+            <td style="padding: 5px 10px; border-bottom: 1px solid #242429; color: #6e6e78; font-family: 'JetBrains Mono', monospace; font-size: 9px;">rgba(168,149,64,0.08)</td>
+            <td style="padding: 5px 10px; color: #4e4e56;">Warning states, LED caution</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sidebar States -->
+  <div class="section">
+    <div class="section-title">Sidebar Navigation</div>
+    <div style="display: flex; gap: 20px; align-items: flex-start;">
+      <div class="nav-preview">
+        <div style="padding: 0.3rem 18px; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4e4e56; margin-bottom: 2px;">OVERVIEW</div>
+        <div class="nav-item" style="background: rgba(255,255,255,0.05); color: #b4b4bc; border-left-color: #6e6e78;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.7;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </div>
+        <div class="nav-item" style="color: #6e6e78;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.4;"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+          Video
+        </div>
+        <div style="padding: 0.5rem 18px 0.3rem; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4e4e56;">INFERENCE</div>
+        <div class="nav-item" style="color: #6e6e78;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.4;"><circle cx="12" cy="12" r="10"></circle></svg>
+          Detections
+        </div>
+      </div>
+      <div style="flex: 1;">
+        <div class="usage-note" style="margin-top: 0;">
+          <strong style="color: #d0d0d6;">Active:</strong> <code>bg: rgba(255,255,255,0.05)</code> + <code>color: --text</code> + <code>border-left: --text-muted</code><br>
+          <strong style="color: #d0d0d6;">Default:</strong> <code>color: --text-muted</code> (#6E6E78), icons at 40% opacity<br>
+          <strong style="color: #d0d0d6;">Hover:</strong> <code>bg: rgba(255,255,255,0.03)</code> + <code>color: --text</code><br>
+          <strong style="color: #d0d0d6;">Section:</strong> <code>--text-dim</code> (#4E4E56), 0.68rem, 600 weight, uppercase, 0.08em tracking<br>
+          <strong style="color: #d0d0d6;">Sidebar:</strong> 220px wide, <code>--bg-sidebar</code> (#141417)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Phalanx Design System v2.0</span>
+    <span>Page 2 of 4</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: Typography ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1><span class="accent">Phalanx</span> Design System</h1>
+      <p class="subtitle">Typography &amp; Font System</p>
+    </div>
+    <div class="meta">Type System</div>
+  </div>
+
+  <!-- Font Families -->
+  <div class="section">
+    <div class="section-title">Font Families</div>
+    <div class="color-grid-2">
+      <div style="border: 1px solid #2c2c33; border-radius: 8px; padding: 16px; background: #212126;">
+        <div style="font-size: 24px; font-weight: 600; color: #d0d0d6; margin-bottom: 6px;">System Sans-Serif</div>
+        <div style="font-size: 13px; color: #6e6e78; margin-bottom: 10px;">-apple-system, BlinkMacSystemFont, Segoe UI,<br>Roboto, Helvetica Neue, Arial, sans-serif</div>
+        <div style="font-size: 9px; color: #4e4e56; font-family: 'JetBrains Mono', monospace;">Primary UI font &middot; All text elements</div>
+      </div>
+      <div style="border: 1px solid #2c2c33; border-radius: 8px; padding: 16px; background: #212126;">
+        <div style="font-size: 24px; font-weight: 500; color: #d0d0d6; margin-bottom: 6px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;">Monospace</div>
+        <div style="font-size: 13px; color: #6e6e78; margin-bottom: 10px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;">SF Mono, Fira Code, Consolas, monospace</div>
+        <div style="font-size: 9px; color: #4e4e56; font-family: 'JetBrains Mono', monospace;">Code, hostnames, commands, Redis CLI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Type Scale -->
+  <div class="section">
+    <div class="section-title">Type Scale (base 14px)</div>
+    <div class="type-row">
+      <div class="type-label">Page Title</div>
+      <div class="type-sample" style="font-size: 17.5px; font-weight: 600; color: #d0d0d6;">Dashboard</div>
+      <div class="type-meta">1.25rem (17.5px) / 600</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Stat Value</div>
+      <div class="type-sample" style="font-size: 16px; font-weight: 600; color: #c8c8d0;">54.4&deg;</div>
+      <div class="type-meta">1.15rem (16px) / 600</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Body</div>
+      <div class="type-sample" style="font-size: 14px; font-weight: 400; color: #b4b4bc;">Running &mdash; inference active</div>
+      <div class="type-meta">1rem (14px) / 400</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Nav / Button</div>
+      <div class="type-sample" style="font-size: 11.9px; font-weight: 500; color: #b4b4bc;">Dashboard &middot; Start &middot; Stop</div>
+      <div class="type-meta">0.85rem (11.9px) / 500</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Small / Meta</div>
+      <div class="type-sample" style="font-size: 10.9px; font-weight: 500; color: #6e6e78;">PID 61390 &middot; Select &middot; Play</div>
+      <div class="type-meta">0.78rem (10.9px) / 500</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Card Header</div>
+      <div class="type-sample" style="font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #4e4e56;">CONTROLS &middot; SERVICE COMMANDS</div>
+      <div class="type-meta">0.75rem / 600 / uppercase</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Stat Label</div>
+      <div class="type-sample" style="font-size: 9.8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #4e4e56;">CPU TEMP &middot; MEMORY &middot; DISK</div>
+      <div class="type-meta">0.7rem / 600 / uppercase</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Sidebar Label</div>
+      <div class="type-sample" style="font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #4e4e56;">OVERVIEW &middot; INFERENCE &middot; DEBUG</div>
+      <div class="type-meta">0.68rem / 600 / 0.08em</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Badge</div>
+      <div class="type-sample" style="font-size: 9.8px; font-weight: 600; letter-spacing: 0.03em; color: #4a9a65;">OK &middot; <span style="color: #b85454;">Stop</span> &middot; <span style="color: #7da8c2;">Restart</span></div>
+      <div class="type-meta">0.7rem / 600 / 0.03em</div>
+    </div>
+    <div class="type-row" style="border-bottom: none;">
+      <div class="type-label">Code</div>
+      <div class="type-sample" style="font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11.9px; color: #808088;">curl -X POST http://localhost:8080/api/engine/start</div>
+      <div class="type-meta">0.85em / mono / #808088</div>
+    </div>
+  </div>
+
+  <!-- Weight Reference -->
+  <div class="section">
+    <div class="section-title">Weight Reference</div>
+    <div style="display: flex; gap: 12px;">
+      <div style="flex: 1; padding: 14px; border: 1px solid #2c2c33; border-radius: 8px; background: #212126;">
+        <div style="font-size: 18px; font-weight: 400; color: #d0d0d6; margin-bottom: 3px;">Regular 400</div>
+        <div style="font-size: 8.5px; color: #4e4e56;">Body text, descriptions</div>
+      </div>
+      <div style="flex: 1; padding: 14px; border: 1px solid #2c2c33; border-radius: 8px; background: #212126;">
+        <div style="font-size: 18px; font-weight: 500; color: #d0d0d6; margin-bottom: 3px;">Medium 500</div>
+        <div style="font-size: 8.5px; color: #4e4e56;">Nav links, buttons, labels</div>
+      </div>
+      <div style="flex: 1; padding: 14px; border: 1px solid #2c2c33; border-radius: 8px; background: #212126;">
+        <div style="font-size: 18px; font-weight: 600; color: #d0d0d6; margin-bottom: 3px;">Semibold 600</div>
+        <div style="font-size: 8.5px; color: #4e4e56;">Headings, stat values, labels</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Phalanx Design System v2.0</span>
+    <span>Page 3 of 4</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4: Components ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1><span class="accent">Phalanx</span> Design System</h1>
+      <p class="subtitle">Components, Spacing &amp; Primitives</p>
+    </div>
+    <div class="meta">UI Patterns</div>
+  </div>
+
+  <!-- Badges -->
+  <div class="section">
+    <div class="section-title">Service Badges &amp; Status</div>
+    <div class="component-row">
+      <span class="badge" style="background: rgba(74,154,101,0.10); color: #4a9a65;">OK</span>
+      <span class="badge" style="background: rgba(75,75,95,0.3); color: #4e4e56;">DOWN</span>
+      <span class="badge" style="background: rgba(95,143,173,0.15); color: #7da8c2;">3</span>
+      <span class="badge" style="background: #212126; color: #6e6e78; border: 1px solid #2c2c33;">INFERENCE</span>
+    </div>
+    <div class="usage-note" style="margin-top: 4px;">
+      Service up: <code>--green-dim</code> bg + <code>--green</code> text.
+      Down: <code>rgba(75,75,95,0.3)</code> bg + <code>--text-dim</code>.
+      Detection count: <code>rgba(95,143,173,0.15)</code> bg + <code>--accent-text</code>.
+      Header badges: <code>--bg-card</code> bg + <code>--border</code>.
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="section">
+    <div class="section-title">Buttons</div>
+    <div style="display: flex; gap: 24px;">
+      <div>
+        <div style="font-size: 0.65rem; color: #4e4e56; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Default</div>
+        <span class="btn" style="background: #212126; color: #b4b4bc;">Stop</span>
+      </div>
+      <div>
+        <div style="font-size: 0.65rem; color: #4e4e56; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Primary</div>
+        <span class="btn" style="background: #3d6b85; border-color: #3d6b85; color: #d4e0e8;">Start</span>
+      </div>
+      <div>
+        <div style="font-size: 0.65rem; color: #4e4e56; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Danger</div>
+        <span class="btn" style="background: #212126; color: #b85454;">Delete</span>
+      </div>
+      <div>
+        <div style="font-size: 0.65rem; color: #4e4e56; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Small</div>
+        <span class="btn" style="background: #212126; color: #b4b4bc; padding: 3px 8px; font-size: 10px;">Restart</span>
+      </div>
+    </div>
+    <div class="usage-note" style="margin-top: 10px;">
+      Default: <code>--bg-card</code> bg + <code>--border</code> + <code>--text</code>.
+      Primary: <code>#3D6B85</code> bg, hover <code>#4A7A96</code>.
+      Danger: <code>--red</code> text, hover bg <code>--red-dim</code>.
+      All: 6px radius, 0.82rem font, 500 weight.
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="section">
+    <div class="section-title">Card &amp; Stat Anatomy</div>
+    <div style="display: flex; gap: 12px;">
+      <div style="flex: 1; border: 1px solid #2c2c33; border-radius: 8px; padding: 12px 16px; background: #212126;">
+        <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #4e4e56; margin-bottom: 4px;">CPU TEMP</div>
+        <div style="font-size: 1.15rem; font-weight: 600; color: #c8c8d0;">54.4&deg;</div>
+      </div>
+      <div style="flex: 1; border: 1px solid #2c2c33; border-radius: 8px; padding: 12px 16px; background: #212126;">
+        <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #4e4e56; margin-bottom: 4px;">ENGINE</div>
+        <div style="font-size: 1.15rem; font-weight: 600; color: #4a9a65;">Inference</div>
+      </div>
+      <div style="flex: 1; border: 1px solid #2c2c33; border-radius: 8px; padding: 12px 16px; background: #212126;">
+        <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #4e4e56; margin-bottom: 6px;">CONTROLS</div>
+        <div style="font-size: 0.78rem; font-weight: 500; color: #6e6e78;">Camera</div>
+        <div style="margin-top: 4px; background: #18181b; border: 1px solid #2c2c33; border-radius: 6px; padding: 5px 8px; font-size: 0.82rem; color: #b4b4bc;">/dev/video10 &mdash; PhalanxSim</div>
+      </div>
+    </div>
+    <div class="usage-note" style="margin-top: 8px;">
+      Cards: <code>--bg-card</code> (#212126) + <code>--border</code> (#2C2C33) + 8px radius + 1rem 1.25rem padding.
+      Inputs: <code>--bg-input</code> (#18181B) + 6px radius.
+    </div>
+  </div>
+
+  <!-- Spacing Scale -->
+  <div class="section">
+    <div class="section-title">Spacing (rem-based, 14px root)</div>
+    <div class="spacing-grid">
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 4px;"></div>
+        <div class="spacing-label">0.25rem</div>
+        <div class="spacing-px">3.5px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 7px;"></div>
+        <div class="spacing-label">0.5rem</div>
+        <div class="spacing-px">7px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 11px;"></div>
+        <div class="spacing-label">0.75rem</div>
+        <div class="spacing-px">10.5px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 14px;"></div>
+        <div class="spacing-label">1rem</div>
+        <div class="spacing-px">14px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 18px;"></div>
+        <div class="spacing-label">1.25rem</div>
+        <div class="spacing-px">17.5px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 21px;"></div>
+        <div class="spacing-label">1.5rem</div>
+        <div class="spacing-px">21px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 28px;"></div>
+        <div class="spacing-label">2rem</div>
+        <div class="spacing-px">28px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-box" style="height: 42px;"></div>
+        <div class="spacing-label">3rem</div>
+        <div class="spacing-px">42px</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Radius -->
+  <div class="section">
+    <div class="section-title">Border Radius</div>
+    <div style="display: flex; gap: 24px; align-items: flex-end;">
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border: 2px solid #2c2c33; border-radius: 4px; margin: 0 auto 5px;"></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6e6e78;">4px</div>
+        <div style="font-size: 8px; color: #4e4e56;">scrollbar</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border: 2px solid #2c2c33; border-radius: 6px; margin: 0 auto 5px;"></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6e6e78;">6px</div>
+        <div style="font-size: 8px; color: #4e4e56;">buttons, inputs, thumbs</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border: 2px solid #2c2c33; border-radius: 8px; margin: 0 auto 5px;"></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6e6e78;">8px</div>
+        <div style="font-size: 8px; color: #4e4e56;">cards, stat items</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border: 2px solid #2c2c33; border-radius: 10px; margin: 0 auto 5px;"></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6e6e78;">10px</div>
+        <div style="font-size: 8px; color: #4e4e56;">badges (pill)</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border: 2px solid #2c2c33; border-radius: 50%; margin: 0 auto 5px;"></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6e6e78;">50%</div>
+        <div style="font-size: 8px; color: #4e4e56;">dots, LED indicators</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Phalanx Design System v2.0</span>
+    <span>Page 4 of 4</span>
+  </div>
+</div>
+
+</body>
+</html>
