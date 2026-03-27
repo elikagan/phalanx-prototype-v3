@@ -2286,18 +2286,20 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           <div class="map-road road-v2"></div>
         </div>
         <div class="fade-overlay" id="fadeOverlay7"></div>
-        <div class="mission-circle" id="missionCircle7" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%)">
+        <div class="mission-circle" id="missionCircle7" style="width:280px;height:340px;top:58%;left:50%;transform:translate(-50%,-50%)">
           <div class="circle-handle handle-top"></div>
           <div class="circle-handle handle-bottom"></div>
           <div class="circle-handle handle-left"></div>
           <div class="circle-handle handle-right"></div>
         </div>
-        <div class="drone-marker" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+        <div style="position:absolute;top:40%;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap">SEARCH ZONE — SOUTHBOUND</div>
+        <div style="position:absolute;top:32%;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:9px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8)">LAST KNOWN — MADISON &amp; OAK</div>
+        <div class="drone-marker" style="top:36%;left:50%;transform:translate(-50%,-50%)">
           <div class="pulse"></div>
           <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
         </div>
-        <svg class="lawnmower" id="lawnmower7" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px">
-          <path d="M40,50 L220,50 L220,90 L40,90 L40,130 L220,130 L220,170 L40,170 L40,210 L220,210" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="6,4"/>
+        <svg class="lawnmower" id="lawnmower7" style="position:absolute;top:58%;left:50%;transform:translate(-50%,-50%);width:240px;height:300px">
+          <path d="M40,30 L40,270 L80,270 L80,30 L120,30 L120,270 L160,270 L160,30 L200,30 L200,270" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="6,4"/>
         </svg>
         <div class="shape-toggle">
           <div class="shape-option active">Circle</div>
@@ -2339,11 +2341,15 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           <div class="map-road road-v2"></div>
         </div>
         <div class="fade-overlay visible"></div>
-        <div class="mission-circle locked" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
-        <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px;z-index:3">
-          <path d="M40,50 L220,50 L220,90 L40,90 L40,130 L220,130 L220,170 L40,170 L40,210 L220,210" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="6,4"/>
+        <div class="mission-circle locked" style="width:280px;height:340px;top:58%;left:50%;transform:translate(-50%,-50%)"></div>
+        <svg style="position:absolute;top:58%;left:50%;transform:translate(-50%,-50%);width:240px;height:300px;z-index:3">
+          <path d="M40,30 L40,270 L80,270 L80,30 L120,30 L120,270 L160,270 L160,30 L200,30 L200,270" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="6,4"/>
         </svg>
-        <div class="drone-marker" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+        <svg style="position:absolute;inset:0;z-index:4;width:100%;height:100%">
+          <line x1="50%" y1="36%" x2="50%" y2="58%" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-dasharray="6,4"/>
+        </svg>
+        <div style="position:absolute;top:32%;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:9px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8)">LAST KNOWN — MADISON &amp; OAK</div>
+        <div class="drone-marker" style="top:36%;left:50%;transform:translate(-50%,-50%)">
           <div class="pulse"></div>
           <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
         </div>
@@ -2396,7 +2402,7 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           <div class="hud-corner hud-br"></div>
         </div>
         <div class="hud-text hud-text-tl">ALT 120m &bull; SPD 45 km/h</div>
-        <div class="hud-text hud-text-tr">HEADING 247&deg; NW<br>LAT 23.2817 LON 20.8772</div>
+        <div class="hud-text hud-text-tr">HEADING 180&deg; S<br>LAT 34.1485 LON -118.1430</div>
         <div class="hud-text hud-text-bl">REC &bull; 00:04:23</div>
         <div class="hud-text hud-text-br">DSA-128 &bull; SEARCHING</div>
         <div class="exec-actions">
@@ -2407,10 +2413,10 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           <div class="map-bg"></div>
           <div class="map-grid"></div>
           <div class="map-roads"><div class="map-road road-h1"></div><div class="map-road road-h2"></div><div class="map-road road-v1"></div><div class="map-road road-v2"></div></div>
-          <div class="mission-circle locked" style="width:100px;height:100px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
-          <svg class="map-lawnmower" viewBox="0 0 86 86"><path d="M12,15 L74,15 L74,30 L12,30 L12,45 L74,45 L74,60 L12,60 L12,75 L74,75"/></svg>
-          <div class="drone-marker" style="width:16px;height:16px;top:41%;left:50%;border-width:2px">
-            <svg viewBox="0 0 24 24" style="width:8px;height:8px;transform:rotate(-90deg)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          <div class="mission-circle locked" style="width:80px;height:100px;top:55%;left:50%;transform:translate(-50%,-50%)"></div>
+          <svg class="map-lawnmower" viewBox="0 0 86 86"><path d="M20,10 L20,76 L35,76 L35,10 L50,10 L50,76 L65,76 L65,10"/></svg>
+          <div class="drone-marker" style="width:16px;height:16px;top:45%;left:45%;border-width:2px">
+            <svg viewBox="0 0 24 24" style="width:8px;height:8px;transform:rotate(180deg)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
           </div>
         </div>
         <div class="video-thumb">
@@ -2503,10 +2509,11 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           <div class="map-bg"></div>
           <div class="map-grid"></div>
           <div class="map-roads"><div class="map-road road-h1"></div><div class="map-road road-h2"></div><div class="map-road road-v1"></div><div class="map-road road-v2"></div></div>
-          <div class="mission-circle locked" style="width:100px;height:100px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
-          <svg class="map-lawnmower" viewBox="0 0 86 86"><path d="M12,15 L74,15 L74,30 L12,30 L12,45 L74,45 L74,60 L12,60 L12,75 L74,75"/></svg>
-          <div class="drone-marker" style="width:16px;height:16px;top:51%;left:56%;border-width:2px">
-            <svg viewBox="0 0 24 24" style="width:8px;height:8px;transform:rotate(90deg)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          <div style="position:absolute;top:48%;left:52%;width:10px;height:10px;background:var(--red);border:1.5px solid #fff;border-radius:50%;z-index:6;box-shadow:0 0 8px rgba(184,84,84,.5)"></div>
+          <div style="position:absolute;top:48%;left:52%;width:30px;height:30px;border:1.5px dashed rgba(184,84,84,.5);border-radius:50%;z-index:5;transform:translate(-33%,-33%)"></div>
+          <div style="position:absolute;top:40%;left:52%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:7px;font-weight:600;color:rgba(184,84,84,.7);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.8)">TARGET</div>
+          <div class="drone-marker" style="width:16px;height:16px;top:42%;left:58%;border-width:2px">
+            <svg viewBox="0 0 24 24" style="width:8px;height:8px;transform:rotate(225deg)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
           </div>
         </div>
         <div class="video-thumb">
@@ -2603,12 +2610,12 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           <div class="map-bg"></div>
           <div class="map-grid"></div>
           <div class="map-roads"><div class="map-road road-h1"></div><div class="map-road road-h2"></div><div class="map-road road-v1"></div><div class="map-road road-v2"></div></div>
-          <div class="mission-circle locked" style="width:100px;height:100px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
-          <svg class="map-lawnmower" viewBox="0 0 86 86"><path d="M12,15 L74,15 L74,30 L12,30 L12,45 L74,45 L74,60 L12,60 L12,75 L74,75"/></svg>
-          <div class="drone-marker" style="width:16px;height:16px;top:35%;left:40%;border-width:2px">
-            <svg viewBox="0 0 24 24" style="width:8px;height:8px"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          <div style="position:absolute;top:48%;left:52%;width:10px;height:10px;background:var(--green);border:1.5px solid #fff;border-radius:50%;z-index:6;box-shadow:0 0 8px rgba(74,154,101,.5)"></div>
+          <div style="position:absolute;top:48%;left:52%;width:30px;height:30px;border:1.5px dashed rgba(74,154,101,.5);border-radius:50%;z-index:5;transform:translate(-33%,-33%)"></div>
+          <div style="position:absolute;top:40%;left:52%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:7px;font-weight:600;color:rgba(74,154,101,.7);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.8)">CONFIRMED</div>
+          <div class="drone-marker" style="width:16px;height:16px;top:55%;left:45%;border-width:2px">
+            <svg viewBox="0 0 24 24" style="width:8px;height:8px;transform:rotate(45deg)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
           </div>
-          <div style="position:absolute;top:33%;left:38%;width:8px;height:8px;background:var(--red);border-radius:50%;z-index:5"></div>
         </div>
         <div class="video-thumb">
           <div class="view-toggle" onclick="toggleView(this)" title="Toggle map/video"><svg viewBox="0 0 24 24"><path d="M3 5v14h18V5H3zm4 2v10H5V7h2zm10 0v10h-2V7h2zm2 0h2v10h-2V7zM9 7h6v10H9V7z"/></svg></div>
@@ -2674,13 +2681,15 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
           </div>
           <div class="fade-overlay visible"></div>
           <div class="mission-circle locked" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.4"></div>
+          <div style="position:absolute;top:30%;left:60%;width:8px;height:8px;background:rgba(184,84,84,.4);border:1px solid rgba(255,255,255,.3);border-radius:50%;z-index:5"></div>
+          <div style="position:absolute;top:26%;left:60%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:8px;color:rgba(184,84,84,.3);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap">TARGET</div>
           <svg style="position:absolute;inset:0;z-index:4;width:100%;height:100%">
-            <line x1="40%" y1="35%" x2="50%" y2="50%" stroke="var(--amber)" stroke-width="2" stroke-dasharray="8,4">
+            <line x1="60%" y1="30%" x2="50%" y2="50%" stroke="var(--amber)" stroke-width="2" stroke-dasharray="8,4">
               <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1s" repeatCount="indefinite"/>
             </line>
           </svg>
-          <div class="drone-marker" style="top:38%;left:42%;transform:translate(-50%,-50%)">
-            <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          <div class="drone-marker" style="top:35%;left:55%;transform:translate(-50%,-50%)">
+            <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#111;transform:rotate(225deg)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
           </div>
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border:2px solid var(--amber);border-radius:50%;z-index:5;display:flex;align-items:center;justify-content:center">
             <div style="width:8px;height:8px;background:var(--amber);border-radius:50%"></div>
@@ -3118,40 +3127,10 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
   }
 
   // Get the active chat input area
-  function getActivePTTBar() {
+  function getActiveInputArea() {
     const screen = document.querySelector('.screen.active');
     if (!screen) return null;
     return screen.querySelector('.chat-input-area');
-  }
-
-  // Type text into the input field character by character
-  function typeInInput(text, callback) {
-    const bar = getActivePTTBar();
-    if (!bar) { if (callback) callback(); return; }
-
-    // Switch to text mode to show the input
-    bar.classList.add('text-mode');
-    const kbBtn = bar.querySelector('.ptt-kb-toggle .material-symbols-outlined');
-    if (kbBtn) kbBtn.textContent = 'mic';
-
-    const input = bar.querySelector('.ptt-text-input input');
-    if (!input) { if (callback) callback(); return; }
-
-    input.value = '';
-    input.focus();
-    let i = 0;
-    nTyping = true;
-
-    const timer = setInterval(() => {
-      if (i < text.length) {
-        input.value += text[i];
-        i++;
-      } else {
-        clearInterval(timer);
-        nTyping = false;
-        if (callback) callback();
-      }
-    }, 30); // ~30ms per character
   }
 
   // Add a user message to the active chat
@@ -3248,7 +3227,7 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
     nProcessing = true;
 
     // Clear the input field
-    const bar = getActivePTTBar();
+    const bar = getActiveInputArea();
     if (bar) {
       const ta = bar.querySelector('textarea');
       if (ta) ta.value = '';
@@ -3313,7 +3292,7 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
 
     // Wait a moment then type character by character
     setTimeout(() => {
-      const text = next.user.join(' ');
+      const text = next.user;
       textarea.value = '';
       let i = 0;
       nTyping = true;
