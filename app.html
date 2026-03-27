@@ -1192,6 +1192,103 @@
   background:var(--bg-card);
 }
 
+/* ═══ DESKTOP PTT ═══ */
+.ptt-input-bar {
+  display:flex; gap:8px; padding-top:12px; border-top:1px solid var(--border); align-items:center;
+}
+.ptt-hold-btn {
+  flex:1; height:40px; border-radius:var(--radius);
+  background:var(--bg-card); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--sans); font-size:13px; font-weight:500;
+  color:var(--text-secondary); cursor:pointer; transition:all .15s; user-select:none;
+}
+.ptt-hold-btn:hover { background:var(--bg-hover); border-color:var(--border-strong); color:var(--text); }
+.ptt-hold-btn .material-symbols-outlined { font-size:18px; color:var(--text-dim); transition:color .15s; }
+.ptt-hold-btn.recording {
+  background:var(--red-dim); border-color:rgba(184,84,84,.3); color:var(--red);
+}
+.ptt-hold-btn.recording .material-symbols-outlined { color:var(--red); }
+.ptt-hold-btn.processing {
+  color:var(--text-dim); pointer-events:none;
+}
+.ptt-kb-toggle {
+  width:40px; height:40px; border-radius:var(--radius);
+  background:var(--bg-card); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+  transition:all .15s;
+}
+.ptt-kb-toggle:hover { background:var(--bg-hover); border-color:var(--border-strong); }
+.ptt-kb-toggle .material-symbols-outlined { font-size:16px; color:var(--text-dim); }
+
+/* Text input mode — shown when keyboard toggle is active */
+.ptt-input-bar.text-mode .ptt-hold-btn { display:none; }
+.ptt-input-bar.text-mode .ptt-text-input { display:flex; }
+.ptt-input-bar .ptt-text-input { display:none; flex:1; gap:8px; }
+.ptt-input-bar .ptt-text-input input {
+  flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:10px 16px; color:var(--text); font-family:var(--sans); font-size:13px; outline:none;
+}
+.ptt-input-bar .ptt-text-input input:focus { border-color:var(--border-strong); }
+.ptt-input-bar .ptt-text-input input::placeholder { color:var(--text-ghost); }
+
+/* Desktop PTT waveform */
+.ptt-hold-btn .ptt-wave { display:none; align-items:center; gap:2px; height:18px; }
+.ptt-hold-btn.recording .ptt-wave { display:flex; }
+.ptt-hold-btn.recording .ptt-label { display:none; }
+.ptt-wave span { width:2px; background:var(--red); border-radius:1px; animation:dPttWave .7s ease-in-out infinite; }
+.ptt-wave span:nth-child(1){animation-delay:0s} .ptt-wave span:nth-child(2){animation-delay:.08s}
+.ptt-wave span:nth-child(3){animation-delay:.16s} .ptt-wave span:nth-child(4){animation-delay:.04s}
+.ptt-wave span:nth-child(5){animation-delay:.12s} .ptt-wave span:nth-child(6){animation-delay:.2s}
+.ptt-wave span:nth-child(7){animation-delay:.06s} .ptt-wave span:nth-child(8){animation-delay:.14s}
+@keyframes dPttWave { 0%,100% { height:3px; } 50% { height:16px; } }
+
+/* ═══ RADIO CHATTER MESSAGES ═══ */
+.radio-msg {
+  margin-bottom:2px; padding:10px 0; position:relative;
+  padding-left:10px; border-left:2px solid var(--amber); max-width:92%;
+}
+.radio-msg + .ch-msg, .ch-msg + .radio-msg { border-top:1px solid rgba(255,255,255,.03); }
+.radio-header {
+  display:flex; align-items:center; gap:6px; cursor:pointer; margin-bottom:4px;
+}
+.radio-header .material-symbols-outlined { font-size:13px; color:var(--amber); }
+.radio-label {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  color:var(--amber); text-transform:uppercase; letter-spacing:.05em;
+}
+.radio-time {
+  font-family:var(--mono); font-size:9px; color:var(--text-dim); margin-left:auto;
+}
+.radio-summary {
+  font-size:13px; line-height:1.5; color:var(--text);
+}
+.radio-expand-label {
+  font-family:var(--mono); font-size:10px; color:var(--text-dim); margin-top:4px;
+  cursor:pointer; display:flex; align-items:center; gap:4px;
+}
+.radio-expand-label:hover { color:var(--text-secondary); }
+.radio-expand-label .material-symbols-outlined { font-size:12px; }
+.radio-transcript {
+  display:none; margin-top:8px; padding:8px 10px;
+  background:rgba(168,149,64,.04); border-radius:var(--radius-sm);
+  font-family:var(--mono); font-size:11px; line-height:1.6; color:var(--text-secondary);
+}
+.radio-transcript.open { display:block; }
+.radio-transcript .unit { color:var(--amber); font-weight:600; }
+.radio-transcript .dispatch { color:var(--text-dim); font-weight:600; }
+
+/* Radio badge in topbar */
+.radio-badge {
+  display:none; align-items:center; gap:3px;
+  background:rgba(168,149,64,.1); border:1px solid rgba(168,149,64,.2);
+  border-radius:var(--radius-sm); padding:2px 7px;
+  font-family:var(--mono); font-size:9px; font-weight:600; color:var(--amber);
+  cursor:pointer; white-space:nowrap;
+}
+.radio-badge.visible { display:flex; }
+.radio-badge .material-symbols-outlined { font-size:11px; }
+
 /* ═══════════════════════════════════════════════ */
 /* ═══ MOBILE RESPONSIVE — max-width: 767px ═══ */
 /* ═══════════════════════════════════════════════ */
@@ -1662,6 +1759,21 @@ body.wireframe .msg.sara[style*="background:rgba(255,255,255"] {
 }
 body.wireframe .sender[style*="color:var(--red)"] { color: #333 !important; }
 body.wireframe .msg strong { font-weight: 600; }
+
+/* Radio chatter wireframe */
+body.wireframe .radio-msg { border-left-color: #999; }
+body.wireframe .radio-header .material-symbols-outlined { color: #666; }
+body.wireframe .radio-label { color: #666; }
+body.wireframe .radio-time { color: #999; }
+body.wireframe .radio-summary { color: #333; }
+body.wireframe .radio-transcript { background: #f5f5f5; color: #333; }
+body.wireframe .radio-transcript .unit { color: #666; }
+body.wireframe .radio-badge { background: #f0f0f0; border-color: #ccc; color: #666; }
+
+/* PTT wireframe */
+body.wireframe .ptt-hold-btn { background: #fff; border: 1px solid #999; color: #333; }
+body.wireframe .ptt-hold-btn:hover { background: #f0f0f0; }
+body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
 </style>
 </head>
 <body>
@@ -1688,6 +1800,7 @@ body.wireframe .msg strong { font-weight: 600; }
         Mission Boundary
       </div>
     </div>
+    <div class="radio-badge" id="radioBadge"><span class="material-symbols-outlined">radio</span><span id="radioBadgeCount">0</span></div>
     <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);white-space:nowrap;letter-spacing:1px" id="clockDisplay">09:40:00</div>
   </div>
 
@@ -2207,9 +2320,17 @@ body.wireframe .msg strong { font-weight: 600; }
             Drag the handles to resize. Press <strong>DONE</strong> when you're satisfied with the boundary.
           </div>
         </div>
-        <div class="chat-input-bar">
-          <input class="chat-input" placeholder="Type DONE or a message...">
-          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        <div class="ptt-input-bar">
+          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+            <span class="material-symbols-outlined">mic</span>
+            <span class="ptt-label">Hold to talk</span>
+            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </button>
+          <div class="ptt-text-input">
+            <input placeholder="Type DONE or a message...">
+            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          </div>
+          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
       </div>
     </div>
@@ -2259,9 +2380,17 @@ body.wireframe .msg strong { font-weight: 600; }
             Press <strong>"Launch Mission"</strong> on the map when you're ready.
           </div>
         </div>
-        <div class="chat-input-bar">
-          <input class="chat-input" placeholder="Type a message...">
-          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        <div class="ptt-input-bar">
+          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+            <span class="material-symbols-outlined">mic</span>
+            <span class="ptt-label">Hold to talk</span>
+            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </button>
+          <div class="ptt-text-input">
+            <input placeholder="Type a message...">
+            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          </div>
+          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
       </div>
     </div>
@@ -2328,10 +2457,33 @@ body.wireframe .msg strong { font-weight: 600; }
           <div class="msg sara">
             Battery at <strong>87%</strong>. Estimated remaining flight time: 32 minutes.
           </div>
+          <div class="radio-msg">
+            <div class="radio-header" onclick="this.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
+              <span class="material-symbols-outlined">radio</span>
+              <span class="radio-label">Dispatch Update</span>
+              <span class="radio-time">9:23 PM</span>
+            </div>
+            <div class="radio-summary">Unit 42 reports visual on red sedan near Madison & Oak intersection.</div>
+            <div class="radio-expand-label" onclick="this.previousElementSibling.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
+              <span class="material-symbols-outlined">expand_more</span> View transcript
+            </div>
+            <div class="radio-transcript">
+              <span class="unit">Unit 42:</span> "I have visual on the red sedan, looks like a Honda, partial plate ending 7-X-ray-3. Vehicle is at Madison and Oak, appears to be slowing down."<br><br>
+              <span class="dispatch">Dispatch:</span> "Copy Unit 42. All units be advised, suspect vehicle at Madison and Oak, slowing. Air support requested."
+            </div>
+          </div>
         </div>
-        <div class="chat-input-bar">
-          <input class="chat-input" placeholder="Type a message...">
-          <button class="send-btn" onclick="goToScreen('10')"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        <div class="ptt-input-bar">
+          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+            <span class="material-symbols-outlined">mic</span>
+            <span class="ptt-label">Hold to talk</span>
+            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </button>
+          <div class="ptt-text-input">
+            <input placeholder="Type a message...">
+            <button class="send-btn" onclick="goToScreen('10')"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          </div>
+          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
         <div style="text-align:right;margin-top:4px">
           <span style="font-family:var(--mono);font-size:9px;color:#444;cursor:pointer;text-decoration:underline;text-decoration-color:#333" onclick="goToScreen('10')">simulate target found &rarr;</span>
@@ -2408,10 +2560,33 @@ body.wireframe .msg strong { font-weight: 600; }
               <button class="choice-btn danger" onclick="goToScreen('9')">No, Continue Search</button>
             </div>
           </div>
+          <div class="radio-msg">
+            <div class="radio-header" onclick="this.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
+              <span class="material-symbols-outlined">radio</span>
+              <span class="radio-label">Dispatch Update</span>
+              <span class="radio-time">9:27 PM</span>
+            </div>
+            <div class="radio-summary">Suspect vehicle confirmed stopped. Unit 42 approaching on foot.</div>
+            <div class="radio-expand-label" onclick="this.previousElementSibling.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
+              <span class="material-symbols-outlined">expand_more</span> View transcript
+            </div>
+            <div class="radio-transcript">
+              <span class="unit">Unit 42:</span> "Vehicle is stopped, driver side door open. One male exiting the vehicle heading east on foot."<br><br>
+              <span class="dispatch">Dispatch:</span> "Copy. Units 38 and 51, set up perimeter eastbound from Oak and Madison."
+            </div>
+          </div>
         </div>
-        <div class="chat-input-bar">
-          <input class="chat-input" placeholder="Type a message...">
-          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        <div class="ptt-input-bar">
+          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+            <span class="material-symbols-outlined">mic</span>
+            <span class="ptt-label">Hold to talk</span>
+            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </button>
+          <div class="ptt-text-input">
+            <input placeholder="Type a message...">
+            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          </div>
+          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
       </div>
     </div>
@@ -2495,9 +2670,17 @@ body.wireframe .msg strong { font-weight: 600; }
             Adjusting orbit position. Repositioning to north-facing view.
           </div>
         </div>
-        <div class="chat-input-bar">
-          <input class="chat-input" placeholder="Type a message...">
-          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        <div class="ptt-input-bar">
+          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+            <span class="material-symbols-outlined">mic</span>
+            <span class="ptt-label">Hold to talk</span>
+            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </button>
+          <div class="ptt-text-input">
+            <input placeholder="Type a message...">
+            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          </div>
+          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
       </div>
     </div>
@@ -2555,9 +2738,17 @@ body.wireframe .msg strong { font-weight: 600; }
             </div>
           </div>
         </div>
-        <div class="chat-input-bar">
-          <input class="chat-input" placeholder="Type a message...">
-          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        <div class="ptt-input-bar">
+          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+            <span class="material-symbols-outlined">mic</span>
+            <span class="ptt-label">Hold to talk</span>
+            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </button>
+          <div class="ptt-text-input">
+            <input placeholder="Type a message...">
+            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          </div>
+          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
       </div>
     </div>
@@ -2607,9 +2798,17 @@ body.wireframe .msg strong { font-weight: 600; }
           </div>
         </div>
       </div>
-      <div class="chat-input-bar">
-        <input class="chat-input" placeholder="Type a message...">
-        <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+      <div class="ptt-input-bar">
+        <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
+          <span class="material-symbols-outlined">mic</span>
+          <span class="ptt-label">Hold to talk</span>
+          <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </button>
+        <div class="ptt-text-input">
+          <input placeholder="Type a message...">
+          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+        </div>
+        <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
       </div>
     </div>
   </div>
@@ -2823,6 +3022,7 @@ body.wireframe .msg strong { font-weight: 600; }
       document.getElementById('nextBtn').classList.toggle('disabled', idx >= seq.length - 1);
     }
 
+    updateRadioBadge(n);
     currentScreen = n;
   }
 
@@ -2837,6 +3037,51 @@ body.wireframe .msg strong { font-weight: 600; }
     const seq = paths[currentPath];
     const idx = seq.indexOf(currentScreen);
     if (idx > 0) goToScreen(seq[idx - 1]);
+  }
+
+  // ═══════ DESKTOP PTT ═══════
+  function toggleDesktopInput(btn) {
+    const bar = btn.closest('.ptt-input-bar');
+    bar.classList.toggle('text-mode');
+    if (bar.classList.contains('text-mode')) {
+      btn.querySelector('.material-symbols-outlined').textContent = 'mic';
+      const inp = bar.querySelector('.ptt-text-input input');
+      if (inp) inp.focus();
+    } else {
+      btn.querySelector('.material-symbols-outlined').textContent = 'keyboard';
+    }
+  }
+
+  function startDesktopPTT(btn) {
+    btn.classList.add('recording');
+  }
+
+  function stopDesktopPTT(btn) {
+    btn.classList.remove('recording');
+    btn.classList.add('processing');
+    setTimeout(() => btn.classList.remove('processing'), 1500);
+  }
+
+  // ═══════ RADIO CHATTER ═══════
+  function updateRadioBadge(n) {
+    const badge = document.getElementById('radioBadge');
+    const count = document.getElementById('radioBadgeCount');
+    if (!badge || !count) return;
+    // Show badge on mission screens (9-13)
+    const missionScreens = ['9','10','11','12','13'];
+    if (missionScreens.includes(n || currentScreen)) {
+      // Count radio messages in current screen's chat
+      const chat = document.getElementById('chat' + (n || currentScreen));
+      const radioMsgs = chat ? chat.querySelectorAll('.radio-msg').length : 0;
+      if (radioMsgs > 0) {
+        badge.classList.add('visible');
+        count.textContent = radioMsgs;
+      } else {
+        badge.classList.remove('visible');
+      }
+    } else {
+      badge.classList.remove('visible');
+    }
   }
 
   function selectPath(path) {
