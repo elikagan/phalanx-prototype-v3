@@ -1885,7 +1885,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
               </div>
             </div>
             <div class="drone-select-stats">
-              <div><span class="drone-stat-label">Units</span><span class="drone-stat-value" style="color:var(--amber)">3</span></div>
+              <div><span class="drone-stat-label">Units</span><span class="drone-stat-value">3</span></div>
               <div><span class="drone-stat-label">Suspect</span><span class="drone-stat-value">Red sedan</span></div>
               <div><span class="drone-stat-label">Direction</span><span class="drone-stat-value">Southbound</span></div>
               <div><span class="drone-stat-label">Speed</span><span class="drone-stat-value">~45 mph</span></div>
@@ -1943,33 +1943,17 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     <div class="chat-layout">
       <div class="chat-messages" id="chat4a">
         <div class="msg sara">
-          Analyzing <strong>3 dispatches</strong> related to incident #4471...
+          I've analyzed <strong>3 dispatch recordings</strong> for incident #4471.
         </div>
-        <!-- Thinking block 1 -->
-        <div class="msg sara wide" style="background:rgba(168,149,64,.06);border-left:2px solid var(--amber);padding-left:14px;border-radius:0 var(--radius) var(--radius) 0">
-          <div style="display:flex;align-items:center;gap:6px;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
-            <span class="material-symbols-outlined" style="font-size:14px;color:var(--amber)">expand_more</span>
-            <span style="font-family:var(--mono);font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em">Dispatch #1 &mdash; 9:03 PM</span>
-            <span style="font-family:var(--mono);font-size:9px;color:var(--green);margin-left:auto">HIGH CONFIDENCE</span>
+        <div class="msg sara" style="cursor:pointer" onclick="this.querySelector('.collapsible').style.display=this.querySelector('.collapsible').style.display==='none'?'block':'none'">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="material-symbols-outlined" style="font-size:14px;color:var(--text-dim)">expand_more</span>
+            <span style="font-size:12px;color:var(--text-dim)">View source transcripts</span>
           </div>
-          <div style="display:none;margin-top:8px;padding:8px;background:rgba(0,0,0,.2);border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--text-secondary);line-height:1.6">
-            "...reporting a <strong style="color:var(--text-bright)">red sedan</strong>, possibly Honda, heading <strong style="color:var(--text-bright)">southbound on Madison</strong>... driver appears to be male, dark clothing... speed approximately <strong style="color:var(--text-bright)">45 miles per hour</strong>..."
+          <div class="collapsible" style="display:none;margin-top:10px;padding:10px 12px;background:var(--bg-card);border-radius:var(--radius);font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--text-secondary)">
+            <div style="margin-bottom:8px"><span style="color:var(--text-dim)">9:03 PM &mdash;</span> "...reporting a red sedan, possibly Honda, heading southbound on Madison... driver male, dark clothing... speed approximately 45 miles per hour..."</div>
+            <div><span style="color:var(--text-dim)">9:12 PM &mdash;</span> "...Unit 42 has visual, vehicle near Madison and Oak... partial plate ends in 7X3... erratic driving, headlights on..."</div>
           </div>
-        </div>
-        <!-- Thinking block 2 -->
-        <div class="msg sara wide" style="background:rgba(168,149,64,.06);border-left:2px solid var(--amber);padding-left:14px;border-radius:0 var(--radius) var(--radius) 0">
-          <div style="display:flex;align-items:center;gap:6px;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
-            <span class="material-symbols-outlined" style="font-size:14px;color:var(--amber)">expand_more</span>
-            <span style="font-family:var(--mono);font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em">Dispatch #2 &mdash; 9:12 PM</span>
-            <span style="font-family:var(--mono);font-size:9px;color:var(--amber);margin-left:auto">MEDIUM CONFIDENCE</span>
-          </div>
-          <div style="display:none;margin-top:8px;padding:8px;background:rgba(0,0,0,.2);border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--text-secondary);line-height:1.6">
-            "...Unit 42 has visual, vehicle now near <strong style="color:var(--text-bright)">Madison and Oak</strong>... partial plate ends in <strong style="color:var(--text-bright)">7X3</strong>... erratic driving, headlights on..."
-          </div>
-        </div>
-        <!-- Extracted facts -->
-        <div class="msg sara">
-          <strong>Extracted target profile:</strong>
         </div>
         <div class="msg sara wide">
           <div class="drone-card" style="margin:0">
@@ -1995,12 +1979,12 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
             <div class="meta-item">
               <span class="meta-label">Responding</span>
-              <span class="meta-value" style="color:var(--amber)">3 units</span>
+              <span class="meta-value">3 units</span>
             </div>
           </div>
         </div>
         <div class="msg sara">
-          Ready to select a drone for this mission?
+          Ready to select a drone?
           <div class="choices">
             <button class="choice-btn primary" onclick="goToScreen('5a')">Select Drone</button>
             <button class="choice-btn">Edit Target Info</button>
@@ -2111,7 +2095,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
             <div class="meta-item">
               <span class="meta-label">Units on Scene</span>
-              <span class="meta-value" style="color:var(--amber)">3 responding</span>
+              <span class="meta-value">3 responding</span>
             </div>
             <div class="meta-item">
               <span class="meta-label">Search Area</span>
@@ -2119,7 +2103,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
             <div class="meta-item">
               <span class="meta-label">Priority</span>
-              <span class="meta-value" style="color:var(--red)">P1 &mdash; Active Pursuit</span>
+              <span class="meta-value">P1 &mdash; Active Pursuit</span>
             </div>
           </div>
         </div>
@@ -2658,7 +2642,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
       </div>
       <div class="split-chat">
         <div class="chat-messages" id="chat11">
-          <div class="msg sara" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2)">
+          <div class="msg sara">
             <strong>Target confirmed.</strong> Keeping orbit active until further instruction.
           </div>
           <div class="msg sara">
@@ -2864,15 +2848,15 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </div>
           <div class="meta-item">
             <span class="meta-label">Status</span>
-            <span class="meta-value" style="color:var(--green)">Connected</span>
+            <span class="meta-value">Connected</span>
           </div>
           <div class="meta-item">
             <span class="meta-label">Battery</span>
-            <span class="meta-value" id="droneBatteryDisplay" style="color:var(--green)">98%</span>
+            <span class="meta-value" id="droneBatteryDisplay">98%</span>
           </div>
           <div class="meta-item">
             <span class="meta-label">Signal</span>
-            <span class="meta-value" style="color:var(--green)">Strong</span>
+            <span class="meta-value">Strong</span>
           </div>
           <div class="meta-item">
             <span class="meta-label">Serial</span>
