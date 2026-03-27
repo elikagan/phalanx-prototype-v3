@@ -1193,55 +1193,29 @@
   background:var(--bg-card);
 }
 
-/* ═══ DESKTOP PTT ═══ */
-.ptt-input-bar {
-  display:flex; gap:8px; padding-top:12px; border-top:1px solid var(--border); align-items:center;
+/* ═══ DESKTOP CHAT INPUT — textarea + mic + send ═══ */
+.chat-input-area {
+  padding-top:12px; border-top:1px solid var(--border);
+  display:flex; gap:8px; align-items:flex-end;
 }
-.ptt-hold-btn {
-  flex:1; height:40px; border-radius:var(--radius);
+.chat-input-area textarea {
+  flex:1; min-height:40px; max-height:120px; resize:none;
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:10px 14px; color:var(--text); font-family:var(--sans); font-size:13px;
+  line-height:1.5; outline:none; transition:border-color .15s;
+}
+.chat-input-area textarea:focus { border-color:var(--border-strong); }
+.chat-input-area textarea::placeholder { color:var(--text-ghost); }
+.chat-input-area .input-btn {
+  width:36px; height:36px; border-radius:var(--radius);
   background:var(--bg-card); border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  font-family:var(--sans); font-size:13px; font-weight:500;
-  color:var(--text-secondary); cursor:pointer; transition:all .15s; user-select:none;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0; transition:all .15s;
 }
-.ptt-hold-btn:hover { background:var(--bg-hover); border-color:var(--border-strong); color:var(--text); }
-.ptt-hold-btn .material-symbols-outlined { font-size:18px; color:var(--text-dim); transition:color .15s; }
-.ptt-hold-btn.recording {
-  background:var(--red-dim); border-color:rgba(184,84,84,.3); color:var(--red);
-}
-.ptt-hold-btn.recording .material-symbols-outlined { color:var(--red); }
-.ptt-hold-btn.processing {
-  color:var(--text-dim); pointer-events:none;
-}
-.ptt-kb-toggle {
-  width:40px; height:40px; border-radius:var(--radius);
-  background:var(--bg-card); border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
-  transition:all .15s;
-}
-.ptt-kb-toggle:hover { background:var(--bg-hover); border-color:var(--border-strong); }
-.ptt-kb-toggle .material-symbols-outlined { font-size:16px; color:var(--text-dim); }
-
-/* Text input mode — shown when keyboard toggle is active */
-.ptt-input-bar.text-mode .ptt-hold-btn { display:none; }
-.ptt-input-bar.text-mode .ptt-text-input { display:flex; }
-.ptt-input-bar .ptt-text-input { display:none; flex:1; gap:8px; }
-.ptt-input-bar .ptt-text-input input {
-  flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
-  padding:10px 16px; color:var(--text); font-family:var(--sans); font-size:13px; outline:none;
-}
-.ptt-input-bar .ptt-text-input input:focus { border-color:var(--border-strong); }
-.ptt-input-bar .ptt-text-input input::placeholder { color:var(--text-ghost); }
-
-/* Desktop PTT waveform */
-.ptt-hold-btn .ptt-wave { display:none; align-items:center; gap:2px; height:18px; }
-.ptt-hold-btn.recording .ptt-wave { display:flex; }
-.ptt-hold-btn.recording .ptt-label { display:none; }
-.ptt-wave span { width:2px; background:var(--red); border-radius:1px; animation:dPttWave .7s ease-in-out infinite; }
-.ptt-wave span:nth-child(1){animation-delay:0s} .ptt-wave span:nth-child(2){animation-delay:.08s}
-.ptt-wave span:nth-child(3){animation-delay:.16s} .ptt-wave span:nth-child(4){animation-delay:.04s}
-.ptt-wave span:nth-child(5){animation-delay:.12s} .ptt-wave span:nth-child(6){animation-delay:.2s}
-.ptt-wave span:nth-child(7){animation-delay:.06s} .ptt-wave span:nth-child(8){animation-delay:.14s}
+.chat-input-area .input-btn:hover { background:var(--bg-hover); border-color:var(--border-strong); }
+.chat-input-area .input-btn .material-symbols-outlined { font-size:16px; color:var(--text-dim); }
+.chat-input-area .input-btn.recording { background:var(--red-dim); border-color:rgba(184,84,84,.3); }
+.chat-input-area .input-btn.recording .material-symbols-outlined { color:var(--red); }
 @keyframes dPttWave { 0%,100% { height:3px; } 50% { height:16px; } }
 
 /* ═══ RADIO CHATTER MESSAGES ═══ */
@@ -1780,10 +1754,9 @@ body.wireframe .radio-transcript { background: #f5f5f5; color: #333; }
 body.wireframe .radio-transcript .unit { color: #666; }
 body.wireframe .radio-badge { background: #f0f0f0; border-color: #ccc; color: #666; }
 
-/* PTT wireframe */
-body.wireframe .ptt-hold-btn { background: #fff; border: 1px solid #999; color: #333; }
-body.wireframe .ptt-hold-btn:hover { background: #f0f0f0; }
-body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
+/* Chat input wireframe */
+body.wireframe .chat-input-area textarea { background:#fff; border:1px solid #ccc; color:#1a1a1a; }
+body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #999; }
 
 /* System activity — dimmed process lines between dialogue */
 .msg.system {
@@ -1967,7 +1940,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     <div class="chat-layout">
       <div class="chat-messages" id="chat4a">
         <div class="msg sara">
-          I've analyzed <strong>3 dispatch recordings</strong> for incident #4471.
+          I've analyzed <strong>3 dispatch recordings</strong> for incident #4471. Here's what I've extracted:
         </div>
         <div class="msg sara" style="cursor:pointer" onclick="this.querySelector('.collapsible').style.display=this.querySelector('.collapsible').style.display==='none'?'block':'none'">
           <div style="display:flex;align-items:center;gap:6px">
@@ -1980,6 +1953,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </div>
         </div>
         <div class="msg sara wide">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:6px">Extracted target profile:</div>
           <div class="drone-card" style="margin:0">
             <div class="meta-item">
               <span class="meta-label">Vehicle</span>
@@ -1994,6 +1968,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
               <span class="meta-value">Madison &amp; Oak</span>
             </div>
             <div class="meta-item">
+              <span class="meta-label">When</span>
+              <span class="meta-value">9:12 PM <span style="color:var(--amber);font-size:10px">&bull; 12 min ago</span></span>
+            </div>
+            <div class="meta-item">
               <span class="meta-label">Speed</span>
               <span class="meta-value">~45 mph southbound</span>
             </div>
@@ -2003,7 +1981,11 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
             <div class="meta-item">
               <span class="meta-label">Responding</span>
-              <span class="meta-value">3 units</span>
+              <span class="meta-value" style="color:var(--green)">3 units</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Est. Range</span>
+              <span class="meta-value">~9 mi from last position</span>
             </div>
           </div>
         </div>
@@ -2335,17 +2317,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             Drag the handles to resize. Press <strong>DONE</strong> when you're satisfied with the boundary.
           </div>
         </div>
-        <div class="ptt-input-bar">
-          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-            <span class="material-symbols-outlined">mic</span>
-            <span class="ptt-label">Hold to talk</span>
-            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </button>
-          <div class="ptt-text-input">
-            <input placeholder="Type DONE or a message...">
-            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-          </div>
-          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+        <div class="chat-input-area">
+          <textarea placeholder="Confirm search area..." rows="1"></textarea>
+          <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+          <button class="input-btn send-btn" onclick="goToScreen('8')"><span class="material-symbols-outlined">send</span></button>
         </div>
       </div>
     </div>
@@ -2395,17 +2370,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             Press <strong>"Launch Mission"</strong> on the map when you're ready.
           </div>
         </div>
-        <div class="ptt-input-bar">
-          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-            <span class="material-symbols-outlined">mic</span>
-            <span class="ptt-label">Hold to talk</span>
-            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </button>
-          <div class="ptt-text-input">
-            <input placeholder="Type a message...">
-            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-          </div>
-          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+        <div class="chat-input-area">
+          <textarea placeholder="Type a message..." rows="1"></textarea>
+          <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+          <button class="input-btn send-btn" onclick="goToScreen('9')"><span class="material-symbols-outlined">send</span></button>
         </div>
       </div>
     </div>
@@ -2491,17 +2459,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
           </div>
         </div>
-        <div class="ptt-input-bar">
-          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-            <span class="material-symbols-outlined">mic</span>
-            <span class="ptt-label">Hold to talk</span>
-            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </button>
-          <div class="ptt-text-input">
-            <input placeholder="Type a message...">
-            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-          </div>
-          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+        <div class="chat-input-area">
+          <textarea placeholder="Type a message..." rows="1"></textarea>
+          <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+          <button class="input-btn send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined">send</span></button>
         </div>
       </div>
     </div>
@@ -2596,17 +2557,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
           </div>
         </div>
-        <div class="ptt-input-bar">
-          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-            <span class="material-symbols-outlined">mic</span>
-            <span class="ptt-label">Hold to talk</span>
-            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </button>
-          <div class="ptt-text-input">
-            <input placeholder="Type a message...">
-            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-          </div>
-          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+        <div class="chat-input-area">
+          <textarea placeholder="Type a message..." rows="1"></textarea>
+          <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+          <button class="input-btn send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined">send</span></button>
         </div>
       </div>
     </div>
@@ -2696,17 +2650,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             <span class="material-symbols-outlined">cell_tower</span> Relaying coordinates to dispatch — 34.1502, -118.1398
           </div>
         </div>
-        <div class="ptt-input-bar">
-          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-            <span class="material-symbols-outlined">mic</span>
-            <span class="ptt-label">Hold to talk</span>
-            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </button>
-          <div class="ptt-text-input">
-            <input placeholder="Type a message...">
-            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-          </div>
-          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+        <div class="chat-input-area">
+          <textarea placeholder="Type a message..." rows="1"></textarea>
+          <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+          <button class="input-btn send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined">send</span></button>
         </div>
       </div>
     </div>
@@ -2770,17 +2717,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
             </div>
           </div>
         </div>
-        <div class="ptt-input-bar">
-          <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-            <span class="material-symbols-outlined">mic</span>
-            <span class="ptt-label">Hold to talk</span>
-            <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </button>
-          <div class="ptt-text-input">
-            <input placeholder="Type a message...">
-            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-          </div>
-          <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+        <div class="chat-input-area">
+          <textarea placeholder="Type a message..." rows="1"></textarea>
+          <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+          <button class="input-btn send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined">send</span></button>
         </div>
       </div>
     </div>
@@ -2830,17 +2770,10 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </div>
         </div>
       </div>
-      <div class="ptt-input-bar">
-        <button class="ptt-hold-btn" onmousedown="startDesktopPTT(this)" onmouseup="stopDesktopPTT(this)">
-          <span class="material-symbols-outlined">mic</span>
-          <span class="ptt-label">Hold to talk</span>
-          <div class="ptt-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-        </button>
-        <div class="ptt-text-input">
-          <input placeholder="Type a message...">
-          <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
-        </div>
-        <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
+      <div class="chat-input-area">
+        <textarea placeholder="Type a message..." rows="1"></textarea>
+        <button class="input-btn mic-btn" onmousedown="startMic(this)" onmouseup="stopMic(this)"><span class="material-symbols-outlined">mic</span></button>
+        <button class="input-btn send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined">send</span></button>
       </div>
     </div>
   </div>
@@ -3184,11 +3117,11 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     return screen.querySelector('.chat-messages');
   }
 
-  // Get the active PTT input bar
+  // Get the active chat input area
   function getActivePTTBar() {
     const screen = document.querySelector('.screen.active');
     if (!screen) return null;
-    return screen.querySelector('.ptt-input-bar');
+    return screen.querySelector('.chat-input-area');
   }
 
   // Type text into the input field character by character
@@ -3317,11 +3250,8 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     // Clear the input field
     const bar = getActivePTTBar();
     if (bar) {
-      const input = bar.querySelector('.ptt-text-input input');
-      if (input) input.value = '';
-      bar.classList.remove('text-mode');
-      const kbBtn = bar.querySelector('.ptt-kb-toggle .material-symbols-outlined');
-      if (kbBtn) kbBtn.textContent = 'keyboard';
+      const ta = bar.querySelector('textarea');
+      if (ta) ta.value = '';
     }
 
     // If user-initiated, add user message
@@ -3369,60 +3299,89 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
 
   // Pre-fill the input with the next exchange's user text (types itself out)
   function prefillNextExchange() {
+    const screenNum = parseInt(currentScreen);
+    if (screenNum < 9) return;
     if (nIdx >= narrativeExchanges.length) return;
     const next = narrativeExchanges[nIdx];
     if (!next.user || next.saraInitiated) return;
 
-    // Wait a moment then start typing
+    // Find the textarea in the current screen's chat-input-area
+    const screen = document.querySelector('.screen.active');
+    if (!screen) return;
+    const textarea = screen.querySelector('.chat-input-area textarea');
+    if (!textarea) return;
+
+    // Wait a moment then type character by character
     setTimeout(() => {
-      typeInInput(next.user, () => {
-        // Text is fully typed, waiting for user to click Send
-      });
+      const text = next.user.join(' ');
+      textarea.value = '';
+      let i = 0;
+      nTyping = true;
+      const timer = setInterval(() => {
+        if (i < text.length) {
+          textarea.value += text[i];
+          i++;
+        } else {
+          clearInterval(timer);
+          nTyping = false;
+        }
+      }, 30);
     }, 1500);
   }
 
-  // ═══════ DESKTOP PTT FUNCTIONS (connected to narrative) ═══════
-  function toggleDesktopInput(btn) {
-    const bar = btn.closest('.ptt-input-bar');
-    bar.classList.toggle('text-mode');
-    if (bar.classList.contains('text-mode')) {
-      btn.querySelector('.material-symbols-outlined').textContent = 'mic';
-      const inp = bar.querySelector('.ptt-text-input input');
-      if (inp) inp.focus();
-    } else {
-      btn.querySelector('.material-symbols-outlined').textContent = 'keyboard';
-    }
-  }
-
-  function startDesktopPTT(btn) {
-    if (nProcessing || nIdx >= narrativeExchanges.length) return;
+  // ═══════ MIC + SEND FUNCTIONS (connected to narrative) ═══════
+  function startMic(btn) {
+    if (nProcessing) return;
     btn.classList.add('recording');
-
-    // If next exchange has user text and it's not already typed, type it now
-    const ex = narrativeExchanges[nIdx];
-    if (ex && ex.user && !nTyping) {
-      const bar = btn.closest('.ptt-input-bar');
-      bar.classList.add('text-mode');
-      const input = bar.querySelector('.ptt-text-input input');
-      if (input && !input.value) {
-        typeInInput(ex.user, () => {});
+    const screenNum = parseInt(currentScreen);
+    if (screenNum >= 9 && nIdx < narrativeExchanges.length) {
+      const ex = narrativeExchanges[nIdx];
+      if (ex && ex.user) {
+        const textarea = btn.closest('.chat-input-area').querySelector('textarea');
+        if (textarea && !textarea.value) {
+          let wi = 0;
+          textarea._micInterval = setInterval(() => {
+            if (wi < ex.user.length) {
+              textarea.value += (wi > 0 ? ' ' : '') + ex.user[wi];
+              wi++;
+            } else {
+              clearInterval(textarea._micInterval);
+              textarea._micInterval = null;
+            }
+          }, 200);
+        }
       }
     }
   }
 
-  function stopDesktopPTT(btn) {
+  function stopMic(btn) {
     btn.classList.remove('recording');
-    if (nProcessing || nIdx >= narrativeExchanges.length) return;
-
-    // Trigger the exchange
-    btn.classList.add('processing');
-    setTimeout(() => btn.classList.remove('processing'), 1500);
-    runExchange(nIdx);
+    const textarea = btn.closest('.chat-input-area').querySelector('textarea');
+    if (textarea && textarea._micInterval) {
+      clearInterval(textarea._micInterval);
+      textarea._micInterval = null;
+    }
+    const screenNum = parseInt(currentScreen);
+    if (screenNum >= 9 && nIdx < narrativeExchanges.length) {
+      const ex = narrativeExchanges[nIdx];
+      if (ex && ex.user && textarea) {
+        textarea.value = ex.user.join(' ');
+      }
+      handleSend(btn);
+    }
   }
 
   // Send button handler — advances narrative
   function handleSend(btn) {
+    const screenNum = parseInt(currentScreen);
+    if (screenNum < 9) return;
     if (nProcessing || nIdx >= narrativeExchanges.length) return;
+    // Clear the textarea
+    const area = btn.closest('.chat-input-area');
+    if (area) {
+      const ta = area.querySelector('textarea');
+      if (ta) ta.value = '';
+    }
     runExchange(nIdx);
   }
 
