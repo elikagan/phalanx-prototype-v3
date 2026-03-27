@@ -3032,6 +3032,12 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     }
 
     updateRadioBadge(n);
+
+    // 911 path: auto-configure search area on screen 7
+    if (n === '7' && currentPath === '911') {
+      setup911SearchArea();
+    }
+
     currentScreen = n;
   }
 
@@ -3175,6 +3181,50 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     msg.className = 'msg sara';
     chat.appendChild(msg);
     chat.scrollTop = chat.scrollHeight;
+  }
+
+  // ═══════ 911 AUTO-CONFIGURED SEARCH AREA ═══════
+  function setup911SearchArea() {
+    const circle = document.getElementById('missionCircle7');
+    const chat = document.getElementById('chat7');
+    const doneBtn = document.getElementById('doneBtn7');
+
+    // Lock the circle immediately — SARA pre-set it
+    circle.classList.add('locked');
+    circle.querySelectorAll('.circle-handle').forEach(h => h.style.display = 'none');
+    document.getElementById('fadeOverlay7').classList.add('visible');
+    document.getElementById('lawnmower7').classList.add('visible');
+
+    // Replace chat messages with 911-specific explanation
+    chat.innerHTML = '';
+
+    const msg1 = document.createElement('div');
+    msg1.className = 'msg sara';
+    msg1.innerHTML = 'Based on dispatch data, I\'ve set the search area automatically.';
+    chat.appendChild(msg1);
+
+    const msg2 = document.createElement('div');
+    msg2.className = 'msg sara wide';
+    msg2.innerHTML = '<div class="drone-card" style="margin:0;grid-template-columns:1fr 1fr">' +
+      '<div class="meta-item"><span class="meta-label">Center</span><span class="meta-value">Madison & Oak (last known)</span></div>' +
+      '<div class="meta-item"><span class="meta-label">Radius</span><span class="meta-value">500m southbound bias</span></div>' +
+      '<div class="meta-item"><span class="meta-label">Reasoning</span><span class="meta-value">~45 mph × 12 min elapsed</span></div>' +
+      '<div class="meta-item"><span class="meta-label">Pattern</span><span class="meta-value">Lawnmower sweep</span></div>' +
+      '</div>';
+    chat.appendChild(msg2);
+
+    const msg3 = document.createElement('div');
+    msg3.className = 'msg sara';
+    msg3.innerHTML = 'You can adjust the boundary if needed, or <strong>confirm to proceed to takeoff</strong>.';
+    chat.appendChild(msg3);
+
+    // Change button to "Confirm & Launch"
+    doneBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;margin-right:4px">rocket_launch</span>Confirm & Launch';
+    doneBtn.onclick = () => goToScreen('8');
+
+    // Hide shape toggle — SARA chose the shape
+    const shapeToggle = document.querySelector('#screen7 .shape-toggle');
+    if (shapeToggle) shapeToggle.style.display = 'none';
   }
 
   // Initial nav dots (before path is selected, just show 2)
