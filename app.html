@@ -1378,6 +1378,12 @@
   .drawer-chat .ch-msg.user .ch-text { font-size:13px; line-height:1.5; color:rgba(255,255,255,.45); }
   .drawer-chat .ch-msg .w { display:inline; animation:wordIn .2s ease both; }
   @keyframes mWordIn { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
+
+  /* Mobile controls — hidden by default, shown per-screen */
+  .fab, .bottom-controls, .drag-bar { display:none !important; }
+  body.mc-ptt .fab { display:flex !important; }
+  body.mc-ptt .bottom-controls { display:flex !important; }
+  body.mc-drawer .drag-bar { display:flex !important; }
 }
 
 /* ============================================
@@ -1778,6 +1784,24 @@ body.wireframe .radio-badge { background: #f0f0f0; border-color: #ccc; color: #6
 body.wireframe .ptt-hold-btn { background: #fff; border: 1px solid #999; color: #333; }
 body.wireframe .ptt-hold-btn:hover { background: #f0f0f0; }
 body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
+
+/* System activity — dimmed process lines between dialogue */
+.msg.system {
+  align-self:flex-start;
+  background:transparent;
+  border:none;
+  padding:4px 0;
+  font-family:var(--mono);
+  font-size:11px;
+  line-height:1.4;
+  color:var(--text-ghost);
+  max-width:100%;
+}
+.msg.system .material-symbols-outlined {
+  font-size:11px;
+  vertical-align:-1px;
+  margin-right:2px;
+}
 </style>
 </head>
 <body>
@@ -2437,16 +2461,19 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
       <div class="split-chat">
         <div class="chat-messages" id="chat9">
           <div class="msg sara">
-            Drone taking off. To abort, press <strong>Pause/Abort</strong> or type it in chat.
+            Drone airborne. Beginning search pattern over designated zone.
+          </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">sync</span> Initializing search grid — 12 blocks, estimated 18 min
+          </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">cell_tower</span> Monitoring 3 active dispatch channels
           </div>
           <div class="msg sara">
-            Drone is airborne. Beginning search pattern.
+            Search underway. <strong>25% complete</strong>. No targets detected yet. Battery at 87%.
           </div>
-          <div class="msg sara">
-            Search progress: <strong>25% complete</strong>. No targets detected yet.
-          </div>
-          <div class="msg sara">
-            Battery at <strong>87%</strong>. Estimated remaining flight time: 32 minutes.
+          <div class="msg system">
+            <span class="material-symbols-outlined">sync</span> Scanning blocks 1-3 complete. Moving to blocks 4-7.
           </div>
           <div class="radio-msg">
             <div class="radio-header" onclick="this.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
@@ -2539,6 +2566,9 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
       </div>
       <div class="split-chat">
         <div class="chat-messages" id="chat10">
+          <div class="msg system">
+            <span class="material-symbols-outlined">visibility</span> Object detection triggered — confidence 94%
+          </div>
           <div class="msg sara">
             <strong>Potential target spotted.</strong> Entering orbit mode for close inspection.
           </div>
@@ -2549,6 +2579,9 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
               <button class="choice-btn primary" onclick="goToScreen('11')">Yes, Confirm Target</button>
               <button class="choice-btn" onclick="goToScreen('9')">No, Continue Search</button>
             </div>
+          </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">gps_fixed</span> Orbit locked at 60m altitude, 25m radius
           </div>
           <div class="radio-msg">
             <div class="radio-header" onclick="this.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
@@ -2644,6 +2677,9 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           <div class="msg sara">
             <strong>Target confirmed.</strong> Keeping orbit active until further instruction.
           </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">videocam</span> High-resolution recording active — 4K 30fps
+          </div>
           <div class="msg sara">
             Drone is maintaining visual contact. I'll narrate any changes.
           </div>
@@ -2658,6 +2694,9 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </div>
           <div class="msg sara">
             Adjusting orbit position. Repositioning to north-facing view.
+          </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">cell_tower</span> Relaying coordinates to dispatch — 34.1502, -118.1398
           </div>
         </div>
         <div class="ptt-input-bar">
@@ -2714,6 +2753,12 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
         <div class="chat-messages" id="chat12">
           <div class="msg sara">
             <strong>Drone returning home.</strong> Estimated arrival: 2 minutes 30 seconds.
+          </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">save</span> Mission data packaged — 847 frames, 12 waypoints, 3 target captures
+          </div>
+          <div class="msg system">
+            <span class="material-symbols-outlined">cloud_upload</span> Uploading to evidence server...
           </div>
           <div class="msg sara">
             Approaching home point. Initiating landing sequence.
@@ -3024,7 +3069,17 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
       setup911SearchArea();
     }
 
+    updateMobileControls(n);
     currentScreen = n;
+  }
+
+  function updateMobileControls(screenId) {
+    document.body.classList.remove('mc-ptt','mc-options','mc-drawer');
+    if (['9','10','11'].includes(screenId)) {
+      document.body.classList.add('mc-ptt','mc-options','mc-drawer');
+    } else if (['12'].includes(screenId)) {
+      document.body.classList.add('mc-options','mc-drawer');
+    }
   }
 
   function nextScreen() {
