@@ -3300,6 +3300,7 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
       let i = 0;
       nTyping = true;
       const timer = setInterval(() => {
+        if (!nTyping) { clearInterval(timer); return; }
         if (i < text.length) {
           textarea.value += text[i];
           textarea.style.height = 'auto';
@@ -3317,12 +3318,17 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
   function startMic(btn) {
     if (nProcessing) return;
     btn.classList.add('recording');
+    // Stop any prefill typing in progress
+    if (nTyping) { nTyping = false; }
     const screenNum = parseInt(currentScreen);
     if (screenNum >= 9 && nIdx < narrativeExchanges.length) {
       const ex = narrativeExchanges[nIdx];
       if (ex && ex.user) {
         const textarea = btn.closest('.chat-input-area').querySelector('textarea');
-        if (textarea && !textarea.value) {
+        if (textarea) {
+          // Clear any pre-typed text from prefill
+          textarea.value = '';
+          textarea.style.height = 'auto';
           const words = ex.user.split(' ');
           let wi = 0;
           textarea._micInterval = setInterval(() => {
