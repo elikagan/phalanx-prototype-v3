@@ -1247,16 +1247,16 @@
 /* ═══ RADIO CHATTER MESSAGES ═══ */
 .radio-msg {
   margin-bottom:2px; padding:10px 0; position:relative;
-  padding-left:10px; border-left:2px solid var(--amber); max-width:92%;
+  padding-left:10px; border-left:2px solid var(--border-strong); max-width:92%;
 }
 .radio-msg + .ch-msg, .ch-msg + .radio-msg { border-top:1px solid rgba(255,255,255,.03); }
 .radio-header {
   display:flex; align-items:center; gap:6px; cursor:pointer; margin-bottom:4px;
 }
-.radio-header .material-symbols-outlined { font-size:13px; color:var(--amber); }
+.radio-header .material-symbols-outlined { font-size:13px; color:var(--text-dim); }
 .radio-label {
   font-family:var(--mono); font-size:9px; font-weight:600;
-  color:var(--amber); text-transform:uppercase; letter-spacing:.05em;
+  color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em;
 }
 .radio-time {
   font-family:var(--mono); font-size:9px; color:var(--text-dim); margin-left:auto;
@@ -1272,19 +1272,19 @@
 .radio-expand-label .material-symbols-outlined { font-size:12px; }
 .radio-transcript {
   display:none; margin-top:8px; padding:8px 10px;
-  background:rgba(168,149,64,.04); border-radius:var(--radius-sm);
+  background:var(--bg-card); border-radius:var(--radius-sm);
   font-family:var(--mono); font-size:11px; line-height:1.6; color:var(--text-secondary);
 }
 .radio-transcript.open { display:block; }
-.radio-transcript .unit { color:var(--amber); font-weight:600; }
+.radio-transcript .unit { color:var(--text); font-weight:600; }
 .radio-transcript .dispatch { color:var(--text-dim); font-weight:600; }
 
 /* Radio badge in topbar */
 .radio-badge {
   display:none; align-items:center; gap:3px;
-  background:rgba(168,149,64,.1); border:1px solid rgba(168,149,64,.2);
+  background:var(--bg-card); border:1px solid var(--border);
   border-radius:var(--radius-sm); padding:2px 7px;
-  font-family:var(--mono); font-size:9px; font-weight:600; color:var(--amber);
+  font-family:var(--mono); font-size:9px; font-weight:600; color:var(--text-secondary);
   cursor:pointer; white-space:nowrap;
 }
 .radio-badge.visible { display:flex; }
@@ -2539,16 +2539,15 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
       </div>
       <div class="split-chat">
         <div class="chat-messages" id="chat10">
-          <div class="msg sara" style="background:var(--red-dim);border-color:rgba(255,255,255,.25)">
-            <div class="sender" style="color:var(--red)">&#9888; SARA ALERT &bull; 09:52:47</div>
-            <strong>Potential target spotted!</strong> Entering orbit mode for close inspection.
+          <div class="msg sara">
+            <strong>Potential target spotted.</strong> Entering orbit mode for close inspection.
           </div>
           <div class="msg sara">
-            I've detected a <strong>red SUV</strong> matching your target description at coordinates 23.2817, 20.8772.<br><br>
-            The drone is now orbiting for a closer look. Please confirm: <strong>Is this your target?</strong>
+            I've detected a <strong>red SUV</strong> matching your target description at coordinates 23.2817, 20.8772. The drone is orbiting for a closer look.<br><br>
+            <strong>Is this your target?</strong>
             <div class="choices">
               <button class="choice-btn primary" onclick="goToScreen('11')">Yes, Confirm Target</button>
-              <button class="choice-btn danger" onclick="goToScreen('9')">No, Continue Search</button>
+              <button class="choice-btn" onclick="goToScreen('9')">No, Continue Search</button>
             </div>
           </div>
           <div class="radio-msg">
