@@ -2499,12 +2499,9 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </button>
           <div class="ptt-text-input">
             <input placeholder="Type a message...">
-            <button class="send-btn" onclick="goToScreen('10')"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
           </div>
           <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
-        </div>
-        <div style="text-align:right;margin-top:4px">
-          <span style="font-family:var(--mono);font-size:9px;color:#444;cursor:pointer;text-decoration:underline;text-decoration-color:#333" onclick="goToScreen('10')">simulate target found &rarr;</span>
         </div>
       </div>
     </div>
@@ -2607,7 +2604,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </button>
           <div class="ptt-text-input">
             <input placeholder="Type a message...">
-            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
           </div>
           <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
@@ -2707,7 +2704,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </button>
           <div class="ptt-text-input">
             <input placeholder="Type a message...">
-            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
           </div>
           <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
@@ -2781,7 +2778,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
           </button>
           <div class="ptt-text-input">
             <input placeholder="Type a message...">
-            <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+            <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
           </div>
           <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
         </div>
@@ -2841,7 +2838,7 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
         </button>
         <div class="ptt-text-input">
           <input placeholder="Type a message...">
-          <button class="send-btn"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
+          <button class="send-btn" onclick="handleSend(this)"><span class="material-symbols-outlined" style="font-size:16px">send</span></button>
         </div>
         <button class="ptt-kb-toggle" onclick="toggleDesktopInput(this)"><span class="material-symbols-outlined">keyboard</span></button>
       </div>
@@ -3071,6 +3068,11 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
 
     updateMobileControls(n);
     currentScreen = n;
+
+    // Start narrative pre-fill when entering mission screen
+    if (n === '9' || n === 9) {
+      setTimeout(prefillNextExchange, 2000);
+    }
   }
 
   function updateMobileControls(screenId) {
@@ -3095,7 +3097,291 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
     if (idx > 0) goToScreen(seq[idx - 1]);
   }
 
-  // ═══════ DESKTOP PTT ═══════
+  // ═══════ NARRATIVE ENGINE ═══════
+  let nIdx = 0; // current exchange index
+  let nTyping = false; // is text currently typing
+  let nProcessing = false; // is SARA currently responding
+
+  const narrativeExchanges = [
+    {
+      user: "SARA, what's the latest from dispatch on this vehicle?",
+      sara: "Last update 2 minutes ago. Unit 42 had visual near Madison and Oak. Suspect heading southbound, headlights off.",
+      radio: { summary: "Unit 42 reports visual on red sedan near Madison & Oak.", time: "9:21 PM", unit: 'Unit 42', transcript: '"I have visual on the red sedan, partial plate ending 7-X-ray-3. Vehicle southbound on Madison, headlights off."' },
+      mapAction: null,
+      screenTransition: null,
+      saraInitiated: false,
+      systemLines: ['Signal strength nominal. Battery 82%.']
+    },
+    {
+      user: "Focus the search south of Oak. Check the side streets off Dupont.",
+      sara: "Confirmed. Adjusting search pattern. Prioritizing residential blocks south of Oak along Dupont.",
+      radio: null,
+      mapAction: null,
+      screenTransition: null,
+      saraInitiated: false,
+      systemLines: ['Recalculating search grid — 8 blocks remaining']
+    },
+    {
+      user: null, // SARA-initiated
+      sara: "Dispatch update — Unit 38 reports suspect vehicle turned west on Elm. Updating search area.",
+      radio: { summary: "Unit 38: suspect vehicle turned west on Elm Street.", time: "9:25 PM", unit: 'Unit 38', transcript: '"Suspect vehicle just turned west on Elm from Dupont. Speed about 30, no lights."' },
+      mapAction: null,
+      screenTransition: null,
+      saraInitiated: true,
+      systemLines: ['Search zone adjusted — focusing on Elm corridor']
+    },
+    {
+      user: "I see something on the feed. Red car parked on Elm, near the alley. Can you get closer?",
+      sara: "Moving in. Descending to 60 meters for closer visual.",
+      radio: null,
+      mapAction: null,
+      screenTransition: null,
+      saraInitiated: false,
+      systemLines: ['Altitude adjusted — 60m. Camera switching to telephoto.']
+    },
+    {
+      user: "That's it. Red Honda, dented bumper. Lock on and orbit.",
+      sara: "Target acquired. Entering orbit mode. Maintaining visual on red sedan, Elm Street.",
+      radio: null,
+      mapAction: null,
+      screenTransition: '10',
+      saraInitiated: false,
+      systemLines: ['Object detection confidence: 94%', 'Orbit locked — 60m altitude, 25m radius']
+    },
+    {
+      user: "Someone's getting out. Zoom in on the driver side.",
+      sara: "Adjusting camera. One individual exiting driver side, heading east on foot.",
+      radio: { summary: "Phalanx air unit has visual — suspect exiting vehicle, eastbound on foot.", time: "9:29 PM", unit: 'SARA → Dispatch', transcript: '"Phalanx has visual. Suspect exiting vehicle on Elm, heading east on foot. Male, dark clothing."' },
+      mapAction: null,
+      screenTransition: null,
+      saraInitiated: false,
+      systemLines: ['High-res capture saved — frame #847']
+    },
+    {
+      user: null, // SARA-initiated
+      sara: "Vehicle is moving. Second occupant driving. Heading south on Dupont. Tracking.",
+      radio: null,
+      mapAction: null,
+      screenTransition: null,
+      saraInitiated: true,
+      systemLines: ['Tracking mode engaged — matching vehicle speed']
+    },
+    {
+      user: "Ground units have the suspect. Good work. Return home.",
+      sara: "Confirmed. Returning to base. ETA 3 minutes. Mission data saved.",
+      radio: null,
+      mapAction: null,
+      screenTransition: '12',
+      saraInitiated: false,
+      systemLines: ['Mission data packaged — 847 frames, 12 waypoints', 'Uploading to evidence server...']
+    },
+  ];
+
+  // Get the active chat container for the current screen
+  function getActiveChat() {
+    const screen = document.querySelector('.screen.active');
+    if (!screen) return null;
+    return screen.querySelector('.chat-messages');
+  }
+
+  // Get the active PTT input bar
+  function getActivePTTBar() {
+    const screen = document.querySelector('.screen.active');
+    if (!screen) return null;
+    return screen.querySelector('.ptt-input-bar');
+  }
+
+  // Type text into the input field character by character
+  function typeInInput(text, callback) {
+    const bar = getActivePTTBar();
+    if (!bar) { if (callback) callback(); return; }
+
+    // Switch to text mode to show the input
+    bar.classList.add('text-mode');
+    const kbBtn = bar.querySelector('.ptt-kb-toggle .material-symbols-outlined');
+    if (kbBtn) kbBtn.textContent = 'mic';
+
+    const input = bar.querySelector('.ptt-text-input input');
+    if (!input) { if (callback) callback(); return; }
+
+    input.value = '';
+    input.focus();
+    let i = 0;
+    nTyping = true;
+
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        input.value += text[i];
+        i++;
+      } else {
+        clearInterval(timer);
+        nTyping = false;
+        if (callback) callback();
+      }
+    }, 30); // ~30ms per character
+  }
+
+  // Add a user message to the active chat
+  function addUserMessage(text) {
+    const chat = getActiveChat();
+    if (!chat) return;
+    const msg = document.createElement('div');
+    msg.className = 'msg user';
+    msg.textContent = text;
+    msg.style.animation = 'fadeIn .25s ease';
+    chat.appendChild(msg);
+    chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Add a SARA message word-by-word
+  function addSaraMessage(text, callback) {
+    const chat = getActiveChat();
+    if (!chat) { if (callback) callback(); return; }
+
+    const msg = document.createElement('div');
+    msg.className = 'msg sara';
+    msg.style.animation = 'fadeIn .25s ease';
+    chat.appendChild(msg);
+
+    const words = text.split(' ');
+    let wi = 0;
+
+    const timer = setInterval(() => {
+      if (wi < words.length) {
+        if (wi === 0) {
+          msg.textContent = words[wi];
+        } else {
+          msg.textContent += ' ' + words[wi];
+        }
+        wi++;
+        chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+      } else {
+        clearInterval(timer);
+        if (callback) callback();
+      }
+    }, 100);
+  }
+
+  // Add system activity line
+  function addSystemLine(text) {
+    const chat = getActiveChat();
+    if (!chat) return;
+    const msg = document.createElement('div');
+    msg.className = 'msg system';
+    msg.innerHTML = '<span class="material-symbols-outlined">sync</span> ' + text;
+    msg.style.animation = 'fadeIn .25s ease';
+    chat.appendChild(msg);
+    chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Add radio block
+  function addRadioBlock(radio) {
+    const chat = getActiveChat();
+    if (!chat) return;
+
+    const block = document.createElement('div');
+    block.className = 'radio-msg';
+    block.innerHTML = `
+      <div class="radio-header" onclick="this.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
+        <span class="material-symbols-outlined">radio</span>
+        <span class="radio-label">Dispatch Update</span>
+        <span class="radio-time">${radio.time}</span>
+      </div>
+      <div class="radio-summary">${radio.summary}</div>
+      <div class="radio-expand-label" onclick="this.previousElementSibling.parentElement.querySelector('.radio-transcript').classList.toggle('open')">
+        <span class="material-symbols-outlined">expand_more</span> View transcript
+      </div>
+      <div class="radio-transcript">
+        <span class="unit">${radio.unit}:</span> ${radio.transcript}
+      </div>
+    `;
+    block.style.animation = 'fadeIn .25s ease';
+    chat.appendChild(block);
+    chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+
+    // Update radio badge
+    const badge = document.getElementById('radioBadge');
+    const count = document.getElementById('radioBadgeCount');
+    if (badge && count) {
+      badge.classList.add('visible');
+      count.textContent = parseInt(count.textContent || '0') + 1;
+    }
+  }
+
+  // Run a single exchange
+  function runExchange(idx) {
+    if (idx >= narrativeExchanges.length) return;
+    const ex = narrativeExchanges[idx];
+    nProcessing = true;
+
+    // Clear the input field
+    const bar = getActivePTTBar();
+    if (bar) {
+      const input = bar.querySelector('.ptt-text-input input');
+      if (input) input.value = '';
+      bar.classList.remove('text-mode');
+      const kbBtn = bar.querySelector('.ptt-kb-toggle .material-symbols-outlined');
+      if (kbBtn) kbBtn.textContent = 'keyboard';
+    }
+
+    // If user-initiated, add user message
+    if (ex.user) {
+      addUserMessage(ex.user);
+    }
+
+    // After brief pause, SARA responds
+    setTimeout(() => {
+      addSaraMessage(ex.sara, () => {
+        // After SARA finishes:
+
+        // Add system lines
+        if (ex.systemLines) {
+          ex.systemLines.forEach((line, i) => {
+            setTimeout(() => addSystemLine(line), (i + 1) * 400);
+          });
+        }
+
+        // Add radio block
+        const radioDelay = ex.systemLines ? (ex.systemLines.length + 1) * 400 : 400;
+        if (ex.radio) {
+          setTimeout(() => addRadioBlock(ex.radio), radioDelay);
+        }
+
+        // Screen transition
+        const transDelay = radioDelay + (ex.radio ? 600 : 0);
+        if (ex.screenTransition) {
+          setTimeout(() => goToScreen(ex.screenTransition), transDelay);
+        }
+
+        nIdx++;
+        nProcessing = false;
+
+        // If next exchange is SARA-initiated, auto-trigger after delay
+        if (nIdx < narrativeExchanges.length && narrativeExchanges[nIdx].saraInitiated) {
+          setTimeout(() => runExchange(nIdx), 4000);
+        } else {
+          // Pre-fill next user text in input
+          prefillNextExchange();
+        }
+      });
+    }, 800);
+  }
+
+  // Pre-fill the input with the next exchange's user text (types itself out)
+  function prefillNextExchange() {
+    if (nIdx >= narrativeExchanges.length) return;
+    const next = narrativeExchanges[nIdx];
+    if (!next.user || next.saraInitiated) return;
+
+    // Wait a moment then start typing
+    setTimeout(() => {
+      typeInInput(next.user, () => {
+        // Text is fully typed, waiting for user to click Send
+      });
+    }, 1500);
+  }
+
+  // ═══════ DESKTOP PTT FUNCTIONS (connected to narrative) ═══════
   function toggleDesktopInput(btn) {
     const bar = btn.closest('.ptt-input-bar');
     bar.classList.toggle('text-mode');
@@ -3109,13 +3395,35 @@ body.wireframe .ptt-kb-toggle { background: #fff; border: 1px solid #999; }
   }
 
   function startDesktopPTT(btn) {
+    if (nProcessing || nIdx >= narrativeExchanges.length) return;
     btn.classList.add('recording');
+
+    // If next exchange has user text and it's not already typed, type it now
+    const ex = narrativeExchanges[nIdx];
+    if (ex && ex.user && !nTyping) {
+      const bar = btn.closest('.ptt-input-bar');
+      bar.classList.add('text-mode');
+      const input = bar.querySelector('.ptt-text-input input');
+      if (input && !input.value) {
+        typeInInput(ex.user, () => {});
+      }
+    }
   }
 
   function stopDesktopPTT(btn) {
     btn.classList.remove('recording');
+    if (nProcessing || nIdx >= narrativeExchanges.length) return;
+
+    // Trigger the exchange
     btn.classList.add('processing');
     setTimeout(() => btn.classList.remove('processing'), 1500);
+    runExchange(nIdx);
+  }
+
+  // Send button handler — advances narrative
+  function handleSend(btn) {
+    if (nProcessing || nIdx >= narrativeExchanges.length) return;
+    runExchange(nIdx);
   }
 
   // ═══════ RADIO CHATTER ═══════
