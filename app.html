@@ -3302,6 +3302,8 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
       const timer = setInterval(() => {
         if (i < text.length) {
           textarea.value += text[i];
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
           i++;
         } else {
           clearInterval(timer);
@@ -3321,10 +3323,14 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
       if (ex && ex.user) {
         const textarea = btn.closest('.chat-input-area').querySelector('textarea');
         if (textarea && !textarea.value) {
+          const words = ex.user.split(' ');
           let wi = 0;
           textarea._micInterval = setInterval(() => {
-            if (wi < ex.user.length) {
-              textarea.value += (wi > 0 ? ' ' : '') + ex.user[wi];
+            if (wi < words.length) {
+              textarea.value += (wi > 0 ? ' ' : '') + words[wi];
+              // Auto-grow textarea
+              textarea.style.height = 'auto';
+              textarea.style.height = textarea.scrollHeight + 'px';
               wi++;
             } else {
               clearInterval(textarea._micInterval);
@@ -3347,7 +3353,9 @@ body.wireframe .chat-input-area .input-btn { background:#fff; border:1px solid #
     if (screenNum >= 9 && nIdx < narrativeExchanges.length) {
       const ex = narrativeExchanges[nIdx];
       if (ex && ex.user && textarea) {
-        textarea.value = ex.user.join(' ');
+        textarea.value = ex.user;
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
       }
       handleSend(btn);
     }
